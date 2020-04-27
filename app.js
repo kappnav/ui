@@ -29,8 +29,11 @@ var log4js = require('log4js'),
     consolidate = require('consolidate'),
     cookieParser = require('cookie-parser'),
     csurf = require('csurf'),
-    proxy = require('http-proxy-middleware'),
     https = require('https')
+
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
 
 const logger = log4js.getLogger('server')
 var log4js_config = process.env.LOG4JS_CONFIG ? JSON.parse(process.env.LOG4JS_CONFIG) : undefined
@@ -45,6 +48,15 @@ const TARGET = process.env.TARGET || 'http://localhost:9080',
       APPNAV_CONFIGMAP_NAMESPACE = process.env.KAPPNAV_CONFIG_NAMESPACE || 'kappnav'
 
 const csrfMiddleware = csurf({ cookie: true })
+
+// Tell express to use the webpack-dev-middleware and use the webpack.config.js
+// configuration file as a base.
+// FIXME: How to remove this from production?
+
+const webpackConfig = require('./webpack.config.js');
+app.use(webpackDevMiddleware(webpack(webpackConfig), {
+  publicPath: webpackConfig.output.publicPath,
+}));
 
 var exclude = function(path) {
   return function(req, res, next) {
@@ -114,7 +126,7 @@ app.use(CONTEXT_PATH, express.static(STATIC_PATH, {
   }
 }))
 
-app.use('/kappnav', proxy({
+app.use('/kappnav', createProxyMiddleware({
   target: TARGET,
   changeOrigin: true,
   secure: false
@@ -230,8 +242,8 @@ app.use('/kappnav-ui/openshift/appLauncher.js', (req, res) => {
   })
 })
 
-app.set('view engine', 'ejs')
-app.set('views', __dirname + '/views')
+app.set('view engine', 'ejs');
+app.set('views', `${__dirname}/views`);
 
 app.locals.manifest = require('./public/webpack-assets.json')
 
