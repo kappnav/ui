@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Link } from "react-router-dom";
 
+require('./LeftNavMenu.scss');
+
 import {
   SideNav,
   SideNavItems,
