@@ -21,7 +21,7 @@ export default class TopNavBar extends PureComponent {
     return (
       <div className="container">
         <HeaderContainer
-          isSideNavExpanded={false}
+          isSideNavExpanded={true}
           render={({ isSideNavExpanded, onClickSideNavExpand }) => (
             <>
               <Header aria-label="IBM Application Navigator">

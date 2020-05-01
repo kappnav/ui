@@ -9,8 +9,8 @@ export class ActionsDropdownMenu extends PureComponent {
     return (
       <>
         <OverflowMenu flipped>
-          <OverflowMenuItem primaryFocus itemText="Edit" />
-          <OverflowMenuItem itemText="Delete" />
+          <OverflowMenuItem primaryFocus itemText="Action 1" />
+          <OverflowMenuItem itemText="Action 2" />
         </OverflowMenu>
       </>
     );

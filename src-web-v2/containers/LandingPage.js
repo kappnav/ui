@@ -24,6 +24,7 @@ import {
 } from '@carbon/icons-react';
 
 import {
+  ActionsButtons,
   ActionsDropdownMenu,
 } from '../components';
 
@@ -133,13 +134,13 @@ export default class LandingPage extends PureComponent {
                 {rows.map((row) => (
                   <React.Fragment key={row.id}>
                     <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
+                      {row.cells.map((cell, i) => (
                         <TableCell key={cell.id}>
                           <span>
                             {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
                             {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
                             {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                            {cell.info.header === 'actions' ? <ActionsDropdownMenu /> : cell.value}
+                            {cell.info.header === 'actions' ? <ActionsButtons /> : cell.value}
                           </span>
                         </TableCell>
                       ))}
