@@ -36,13 +36,11 @@ process.env.BABEL_ENV = 'client';
 const prodExternals = {};
 
 module.exports = {
-  mode: 'development',
   context: __dirname,
-  devtool: PRODUCTION ? 'source-map' : 'cheap-module-source-map',
   stats: { children: false },
   entry: {
-    common: './src-web-v2/common.scss',
-    header: './src-web-v2/index.header.js',
+    carbon: './src-web-v2/carbon.scss',
+    main: './src-web-v2/index.js',
   },
 
   externals: Object.assign(PRODUCTION ? prodExternals : {}, {

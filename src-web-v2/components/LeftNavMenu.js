@@ -27,25 +27,13 @@ export class LeftNavMenu extends PureComponent {
       >
         <SideNavItems>
           <SideNavMenu renderIcon={Application20} title="Applications">
-            <SideNavMenuItem element={Link} to="applications/stock-trader">
+            <SideNavMenuItem element={Link} to="/applications/stock-trader">
               Stock Trader
             </SideNavMenuItem>
-            <SideNavMenuItem href="">
-              Book Info
-            </SideNavMenuItem>
-            <SideNavMenuItem href="">
-              Music Service
-            </SideNavMenuItem>
           </SideNavMenu>
-          <SideNavLink renderIcon={Code20} element={Link} to="jobs">
+          <SideNavLink renderIcon={Code20} element={Link} to="/jobs">
             Command Actions
           </SideNavLink>
-          {/* <SideNavLink renderIcon={Category20} href="">
-            WAS ND Cells
-          </SideNavLink>
-          <SideNavLink renderIcon={TreeViewAlt20} href="">
-            Liberty Collectives
-          </SideNavLink> */}
         </SideNavItems>
       </SideNav>
     );

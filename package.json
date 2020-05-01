@@ -4,7 +4,7 @@
   "description": "UI application for kappnav",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=development node app.js",
+    "start": "cross-env NODE_ENV=development node app.js --config webpack.dev.js",
     "start:production": "cross-env NODE_ENV=production node app.js",
     "clean": "del-cli dll public/*",
     "debug": "node --debug app.js",

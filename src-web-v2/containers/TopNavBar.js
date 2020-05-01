@@ -10,7 +10,7 @@ import {
 } from 'carbon-components-react/lib/components/UIShell';
 
 import {
-  GlobalActions,
+  TopNavBarActions,
   LeftNavMenu,
 } from '../components';
 
@@ -40,7 +40,7 @@ export default class TopNavBar extends PureComponent {
                   Application Navigator
                 </HeaderName>
 
-                <GlobalActions />
+                <TopNavBarActions />
               </Header>
 
               {/* The main body of the page */}

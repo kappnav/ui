@@ -14,7 +14,7 @@ import {
   Information20,
 } from '@carbon/icons-react';
 
-class GlobalActions extends PureComponent {
+class TopNavBarActions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,4 +43,4 @@ class GlobalActions extends PureComponent {
   }
 }
 
-export default GlobalActions;
+export default TopNavBarActions;

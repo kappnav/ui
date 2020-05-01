@@ -17,11 +17,13 @@ import { render } from 'react-dom';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import TopNavBar from './containers/TopNavBar';
 
+require('./common.scss');
+
 /* eslint-disable react/jsx-filename-extension */
 
 render(
   <Router basename="/kappnav-ui">
     <TopNavBar />
   </Router>,
-  document.getElementById('header'),
+  document.getElementById('main'),
 );

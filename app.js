@@ -53,7 +53,7 @@ const csrfMiddleware = csurf({ cookie: true })
 // configuration file as a base.
 // FIXME: How to remove this from production?
 
-const webpackConfig = require('./webpack.config.js');
+const webpackConfig = require('./webpack.dev.js');
 app.use(webpackDevMiddleware(webpack(webpackConfig), {
   publicPath: webpackConfig.output.publicPath,
 }));

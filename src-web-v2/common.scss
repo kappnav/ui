@@ -1,10 +1,6 @@
-// Enable @carbon/themes
-@import '@carbon/themes/scss/themes';
-$carbon--theme: $carbon--theme--g10;
-@include carbon--theme();
-
-@import 'carbon-components/scss/globals/scss/styles.scss';
-
+//
+// Common styling used throughout kAppNav
+//
 $carbon-sidenav-width: 3rem;
 
 .bx--content {

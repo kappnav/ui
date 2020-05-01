@@ -1,4 +1,7 @@
 import React, { PureComponent } from 'react';
+
+import { Link } from 'react-router-dom';
+
 import {
   Content,
 } from 'carbon-components-react/lib/components/UIShell';
@@ -9,6 +12,8 @@ import {
   OverflowMenu,
   OverflowMenuItem,
   Icon,
+  Breadcrumb,
+  BreadcrumbItem,
 } from 'carbon-components-react';
 
 import {
@@ -23,6 +28,7 @@ import {
 
 import {
   ActionsDropdownMenu,
+  SecondaryHeader,
 } from '../components';
 
 const {
@@ -52,28 +58,30 @@ const defaultHeaders = [
     key: 'name',
   },
   {
+    header: 'Kind',
+    key: 'kind',
+  },
+  {
     header: 'Namespace',
     key: 'namespace',
+  },
+  {
+    header: 'Platform',
+    key: 'platform',
+  },
+  {
+    header: 'Action',
+    key: 'actions',
   },
 ];
 
 const initialRows = [
   {
     id: 'a',
-    name: 'stock-trader',
+    name: 'a-component-part',
+    kind: 'FakeService',
+    platform: 'TheBestPlatform',
     status: 'Normal',
-    namespace: 'kappnav',
-  },
-  {
-    id: 'b',
-    name: 'bookinfo',
-    status: 'Warning',
-    namespace: 'kappnav',
-  },
-  {
-    id: 'c',
-    name: 'music-library',
-    status: 'Problem',
     namespace: 'kappnav',
   },
 ];
@@ -92,63 +100,67 @@ export default class SingleApplication extends PureComponent {
           getTableProps,
           onInputChange,
         }) => (
-          <TableContainer title="Applications">
+          <>
+            <SecondaryHeader />
 
-            <TableToolbar>
-              <TableToolbarContent>
-                <TableToolbarSearch onChange={onInputChange} />
-                <Button
-                  onClick={() => console.log('Clicking')}
-                  size="small"
-                  kind="primary"
-                  renderIcon={Add20}
-                  iconDescription="Add Application"
-                >
-                  Add Application
-                </Button>
-              </TableToolbarContent>
-            </TableToolbar>
+            <TableContainer title="Components">
 
-            <Table {...getTableProps()}>
+              <TableToolbar>
+                <TableToolbarContent>
+                  <TableToolbarSearch onChange={onInputChange} />
+                  <Button
+                    onClick={() => console.log('Clicking')}
+                    size="small"
+                    kind="primary"
+                    renderIcon={Add20}
+                    iconDescription="Add Application"
+                  >
+                    Add Component
+                  </Button>
+                </TableToolbarContent>
+              </TableToolbar>
 
-              <TableHead>
-                <TableRow>
-                  {/* add the expand header before all other headers */}
-                  <TableExpandHeader />
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>
-                      {header.header}
-                    </TableHeader>
+              <Table {...getTableProps()}>
+
+                <TableHead>
+                  <TableRow>
+                    {/* add the expand header before all other headers */}
+                    <TableExpandHeader />
+                    {headers.map((header) => (
+                      <TableHeader {...getHeaderProps({ header })}>
+                        {header.header}
+                      </TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {rows.map((row) => (
+                    <React.Fragment key={row.id}>
+                      <TableExpandRow {...getRowProps({ row })}>
+                        {row.cells.map((cell) => (
+                          <TableCell key={cell.id}>
+                            <span>
+                              {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                              {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                              {cell.info.header === 'actions' ? <ActionsDropdownMenu /> : cell.value}
+                            </span>
+                          </TableCell>
+                        ))}
+                      </TableExpandRow>
+                      {row.isExpanded && (
+                      <TableExpandedRow colSpan={headers.length + 1}>
+                        <h1>Expandable row content</h1>
+                        <p>Description here</p>
+                      </TableExpandedRow>
+                      )}
+                    </React.Fragment>
                   ))}
-                </TableRow>
-              </TableHead>
+                </TableBody>
 
-              <TableBody>
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>
-                          <span>
-                            {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                            {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                            {cell.info.header === 'actions' ? <ActionsDropdownMenu /> : cell.value}
-                          </span>
-                        </TableCell>
-                      ))}
-                    </TableExpandRow>
-                    {row.isExpanded && (
-                    <TableExpandedRow colSpan={headers.length + 1}>
-                      <h1>Expandable row content</h1>
-                      <p>Description here</p>
-                    </TableExpandedRow>
-                    )}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-
-            </Table>
-          </TableContainer>
+              </Table>
+            </TableContainer>
+          </>
         )}
       />
     );
