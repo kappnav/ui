@@ -10,6 +10,8 @@ import {
 
 import { ActionsDropdownMenu } from '.';
 
+import msgs from '../../nls/kappnav.properties';
+
 require('./ActionButtons.scss');
 
 let buttonProps = {
@@ -19,6 +21,7 @@ let buttonProps = {
   tooltipPosition: 'top',
   tooltipAlignment: 'center',
   className: 'kv--btn',
+  iconDescription: 'Placeholder',
 };
 
 export class ActionsButtons extends PureComponent {
@@ -30,8 +33,8 @@ export class ActionsButtons extends PureComponent {
   render() {
     return (
       <span className="bx--btn-set">
-        <Button {...buttonProps} iconDescription="Edit" renderIcon={Edit20} />
-        <Button {...buttonProps} iconDescription="Delete" renderIcon={TrashCan20} />
+        <Button {...buttonProps} iconDescription={msgs.get('table.actions.edit')} renderIcon={Edit20} />
+        <Button {...buttonProps} iconDescription={msgs.get('table.actions.remove')} renderIcon={TrashCan20} />
         <ActionsDropdownMenu />
       </span>
     );

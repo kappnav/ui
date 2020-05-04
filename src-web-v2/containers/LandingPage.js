@@ -28,6 +28,8 @@ import {
   ActionsDropdownMenu,
 } from '../components';
 
+import msgs from '../../nls/kappnav.properties';
+
 const {
   TableContainer,
   Table,
@@ -59,8 +61,8 @@ const defaultHeaders = [
     key: 'namespace',
   },
   {
-    header: 'Actions',
-    key: 'actions',
+    header: 'Action',
+    key: 'action',
   },
 ];
 
@@ -99,19 +101,19 @@ export default class LandingPage extends PureComponent {
           getTableProps,
           onInputChange,
         }) => (
-          <TableContainer title="Applications">
+          <TableContainer title={msgs.get('tabs.applications')}>
 
             <TableToolbar>
               <TableToolbarContent>
-                <TableToolbarSearch onChange={onInputChange} />
+                <TableToolbarSearch placeHolderText="Search by name, namespace or component" onChange={onInputChange} />
                 <Button
                   onClick={() => console.log('Clicking')}
                   size="small"
                   kind="primary"
                   renderIcon={Add20}
-                  iconDescription="Add Application"
+                  iconDescription={msgs.get('button.application.create')}
                 >
-                  Add Application
+                  {msgs.get('button.application.create')}
                 </Button>
               </TableToolbarContent>
             </TableToolbar>
@@ -124,7 +126,7 @@ export default class LandingPage extends PureComponent {
                   <TableExpandHeader />
                   {headers.map((header) => (
                     <TableHeader {...getHeaderProps({ header })}>
-                      {header.header}
+                      {msgs.get(`table.header.${header.key}`)}
                     </TableHeader>
                   ))}
                 </TableRow>
@@ -140,7 +142,7 @@ export default class LandingPage extends PureComponent {
                             {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
                             {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
                             {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                            {cell.info.header === 'actions' ? <ActionsButtons /> : cell.value}
+                            {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
                           </span>
                         </TableCell>
                       ))}

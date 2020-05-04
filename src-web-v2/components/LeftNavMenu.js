@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 require('./LeftNavMenu.scss');
 
+import msgs from '../../nls/kappnav.properties';
+
 import {
   SideNav,
   SideNavItems,
@@ -13,6 +15,7 @@ import {
 
 import {
   Application20,
+  Catalog20,
   Code20,
   Category20,
   TreeViewAlt20,
@@ -28,13 +31,13 @@ export class LeftNavMenu extends PureComponent {
         expanded={expanded}
       >
         <SideNavItems>
-          <SideNavMenu renderIcon={Application20} title="Applications">
+          <SideNavMenu renderIcon={Application20} title={msgs.get('page.applicationView.title')}>
             <SideNavMenuItem element={Link} to="/applications/stock-trader">
               Stock Trader
             </SideNavMenuItem>
           </SideNavMenu>
-          <SideNavLink renderIcon={Code20} element={Link} to="/jobs">
-            Command Actions
+          <SideNavLink renderIcon={Catalog20} element={Link} to="/jobs">
+            {msgs.get('page.jobsView.title')}
           </SideNavLink>
         </SideNavItems>
       </SideNav>

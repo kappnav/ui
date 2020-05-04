@@ -27,6 +27,8 @@ import {
   ActionsDropdownMenu,
 } from '../components';
 
+import msgs from '../../nls/kappnav.properties';
+
 const {
   TableContainer,
   Table,
@@ -55,7 +57,7 @@ const defaultHeaders = [
   },
   {
     header: 'Application Name',
-    key: 'appName',
+    key: 'applicationName',
   },
   {
     header: 'Component',
@@ -66,8 +68,8 @@ const defaultHeaders = [
     key: 'age',
   },
   {
-    header: 'Actions',
-    key: 'actions',
+    header: 'Action',
+    key: 'action',
   },
 ];
 
@@ -76,7 +78,7 @@ const initialRows = [
     id: 'a',
     status: 'Completed',
     actionName: 'job-name',
-    appName: 'default/stocktrader',
+    applicationName: 'default/stocktrader',
     component: 'default/loyalty-level',
     age: '27 days ago',
   },
@@ -96,7 +98,7 @@ export default class LandingPage extends PureComponent {
           getTableProps,
           onInputChange,
         }) => (
-          <TableContainer title="Command Actions">
+          <TableContainer title={msgs.get('page.jobsView.title')}>
 
             <TableToolbar>
               <TableToolbarContent>
@@ -106,9 +108,9 @@ export default class LandingPage extends PureComponent {
                   size="small"
                   kind="primary"
                   renderIcon={Add20}
-                  iconDescription="Add Application"
+                  iconDescription={msgs.get('add.command.action')}
                 >
-                  Add Command Action
+                  {msgs.get('add.command.action')}
                 </Button>
               </TableToolbarContent>
             </TableToolbar>
@@ -121,7 +123,7 @@ export default class LandingPage extends PureComponent {
                   <TableExpandHeader />
                   {headers.map((header) => (
                     <TableHeader {...getHeaderProps({ header })}>
-                      {header.header}
+                      {msgs.get(`table.header.${header.key}`)}
                     </TableHeader>
                   ))}
                 </TableRow>
@@ -135,7 +137,7 @@ export default class LandingPage extends PureComponent {
                         <TableCell key={cell.id}>
                           <span>
                             {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                            {cell.info.header === 'actions' ? <ActionsDropdownMenu /> : cell.value}
+                            {cell.info.header === 'action' ? <ActionsDropdownMenu /> : cell.value}
                           </span>
                         </TableCell>
                       ))}

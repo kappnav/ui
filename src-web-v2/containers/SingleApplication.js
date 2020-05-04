@@ -31,6 +31,8 @@ import {
   SecondaryHeader,
 } from '../components';
 
+import msgs from '../../nls/kappnav.properties';
+
 const {
   TableContainer,
   Table,
@@ -71,7 +73,7 @@ const defaultHeaders = [
   },
   {
     header: 'Action',
-    key: 'actions',
+    key: 'action',
   },
 ];
 
@@ -103,7 +105,7 @@ export default class SingleApplication extends PureComponent {
           <>
             <SecondaryHeader />
 
-            <TableContainer title="Components">
+            <TableContainer title={msgs.get('page.componentView.title')}>
 
               <TableToolbar>
                 <TableToolbarContent>
@@ -113,9 +115,9 @@ export default class SingleApplication extends PureComponent {
                     size="small"
                     kind="primary"
                     renderIcon={Add20}
-                    iconDescription="Add Application"
+                    iconDescription={msgs.get('add.component')}
                   >
-                    Add Component
+                    {msgs.get('add.component')}
                   </Button>
                 </TableToolbarContent>
               </TableToolbar>
@@ -128,7 +130,7 @@ export default class SingleApplication extends PureComponent {
                     <TableExpandHeader />
                     {headers.map((header) => (
                       <TableHeader {...getHeaderProps({ header })}>
-                        {header.header}
+                        {msgs.get(`table.header.${header.key}`)}
                       </TableHeader>
                     ))}
                   </TableRow>
@@ -143,7 +145,7 @@ export default class SingleApplication extends PureComponent {
                             <span>
                               {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
                               {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                              {cell.info.header === 'actions' ? <ActionsDropdownMenu /> : cell.value}
+                              {cell.info.header === 'action' ? <ActionsDropdownMenu /> : cell.value}
                             </span>
                           </TableCell>
                         ))}

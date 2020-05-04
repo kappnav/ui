@@ -245,7 +245,7 @@ app.use('/kappnav-ui/openshift/appLauncher.js', (req, res) => {
 app.set('view engine', 'ejs');
 app.set('views', `${__dirname}/views`);
 
-app.locals.manifest = require('./public/webpack-assets.json')
+app.locals.manifest = require('./public/webpack-assets.json');
 
 app.get('*', (req, res) => {
   res.setHeader('Cache-Control', 'no-store')
