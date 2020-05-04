@@ -21,7 +21,7 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
 const WebpackMd5Hash = require('webpack-md5-hash');
-const FileManagerPlugin = require('filemanager-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const VersionFile = require('webpack-version-file');
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -177,16 +177,13 @@ module.exports = {
     }),
     PRODUCTION ? new webpack.HashedModuleIdsPlugin() : new webpack.NamedModulesPlugin(),
     new WebpackMd5Hash(),
-    new FileManagerPlugin({
-      onEnd: {
-        copy: [
-          { source: 'node_modules/carbon-icons/dist/carbon-icons.svg', destination: 'public/graphics' },
-          { source: 'graphics/*.svg', destination: 'public/graphics' },
-          { source: 'graphics/*.png', destination: 'public/graphics' },
-          { source: 'fonts', destination: 'public/fonts' },
-        ],
-      },
-    }),
+	new CopyPlugin(
+		[ { from: './node_modules/carbon-icons/dist/carbon-icons.svg', to: './graphics' },
+		  { from: './graphics/*.svg', to: './graphics', flatten : true },
+		  { from: './graphics/*.png', to: './graphics', flatten : true },
+		  { from: './fonts', to: './fonts' },
+		],
+    ),
     new VersionFile({
       output: './public/version.txt',
       package: './package.json',
