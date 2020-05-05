@@ -8,7 +8,7 @@ export class ActionsDropdownMenu extends PureComponent {
   render() {
     return (
       <>
-        <OverflowMenu flipped>
+        <OverflowMenu className="kv--overflow-menu" flipped>
           <OverflowMenuItem primaryFocus itemText="Action 1" />
           <OverflowMenuItem itemText="Action 2" />
         </OverflowMenu>

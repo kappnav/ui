@@ -11,17 +11,28 @@ $carbon-sidenav-width: 3rem;
   background-color: #161616;
 }
 
+//
+// Supported Carbon styling for icons
+//
+$statusIconMarginRight: 10px;
 svg {
   &.kv--normal-icon {
+    margin-right: $statusIconMarginRight;
     fill: green;
   }
   &.kv--warning-icon {
+    margin-right: $statusIconMarginRight;
     fill: #F8C22B;
     & [data-icon-path='inner-path'] {
       fill: black;
     }
   }
   &.kv--problem-icon {
+    margin-right: $statusIconMarginRight;
     fill: red;
   }
+}
+
+td > * {
+  vertical-align: middle;
 }

@@ -135,10 +135,8 @@ export default class LandingPage extends PureComponent {
                     <TableExpandRow {...getRowProps({ row })}>
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>
-                          <span>
-                            {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                            {cell.info.header === 'action' ? <ActionsDropdownMenu /> : cell.value}
-                          </span>
+                          {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                          {cell.info.header === 'action' ? <ActionsDropdownMenu /> : <span>cell.value</span>}
                         </TableCell>
                       ))}
                     </TableExpandRow>

@@ -21,6 +21,9 @@ import {
   CheckmarkOutline20,
   WarningAltInvertedFilled20,
   WarningSquareFilled20,
+  CheckmarkOutline16,
+  WarningAltInvertedFilled16,
+  WarningSquareFilled16,
 } from '@carbon/icons-react';
 
 import {
@@ -29,6 +32,8 @@ import {
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
+
+require('./LandingPage.scss');
 
 const {
   TableContainer,
@@ -136,14 +141,12 @@ export default class LandingPage extends PureComponent {
                 {rows.map((row) => (
                   <React.Fragment key={row.id}>
                     <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell, i) => (
+                      {row.cells.map((cell) => (
                         <TableCell key={cell.id}>
-                          <span>
-                            {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                            {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                            {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                            {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
-                          </span>
+                          {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                          {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                          {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
+                          {cell.info.header === 'action' ? <ActionsButtons /> : <span>{cell.value}</span>}
                         </TableCell>
                       ))}
                     </TableExpandRow>
