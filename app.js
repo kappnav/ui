@@ -99,6 +99,8 @@ app.use(CONTEXT_PATH, express.static(STATIC_PATH, {
     res.setHeader('Strict-Transport-Security', 'max-age=99999999')
     // eslint-disable-next-line quotes
     res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'self'")
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('X-XSS-Protection', '1')
   }
 }))
 
@@ -228,6 +230,8 @@ app.get('*', (req, res) => {
   res.setHeader('Cache-Control', 'no-store')
   res.setHeader('Pragma', 'no-cache')
   res.setHeader('Strict-Transport-Security', 'max-age=99999999')
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('X-XSS-Protection', '1')
   // eslint-disable-next-line quotes
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' blob: https://"+req.headers['host']+"/*; frame-ancestors 'self'")
   logger.debug('APPNAV_CONFIGMAP_NAMESPACE is : ' + APPNAV_CONFIGMAP_NAMESPACE + ' CONTEXT_PATH is : ' + CONTEXT_PATH)
