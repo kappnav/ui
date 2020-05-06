@@ -25,8 +25,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 const VersionFile = require('webpack-version-file');
 const CompressionPlugin = require('compression-webpack-plugin');
-const config = require('./config');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const config = require('./config');
 
 const NO_OP = () => { };
 const PRODUCTION = process.env.BUILD_ENV ? /production/.test(process.env.BUILD_ENV) : false;
@@ -177,12 +177,12 @@ module.exports = {
     }),
     PRODUCTION ? new webpack.HashedModuleIdsPlugin() : new webpack.NamedModulesPlugin(),
     new WebpackMd5Hash(),
-	new CopyPlugin(
-		[ { from: './node_modules/carbon-icons/dist/carbon-icons.svg', to: './graphics' },
-		  { from: './graphics/*.svg', to: './graphics', flatten : true },
-		  { from: './graphics/*.png', to: './graphics', flatten : true },
-		  { from: './fonts', to: './fonts' },
-		],
+    new CopyPlugin(
+      [{ from: './node_modules/carbon-icons/dist/carbon-icons.svg', to: './graphics' },
+        { from: './graphics/*.svg', to: './graphics', flatten: true },
+        { from: './graphics/*.png', to: './graphics', flatten: true },
+        { from: './fonts', to: './fonts' },
+      ],
     ),
     new VersionFile({
       output: './public/version.txt',
