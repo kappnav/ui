@@ -32,8 +32,6 @@ var log4js = require('log4js'),
     https = require('https')
 
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
 
 const logger = log4js.getLogger('server')
 var log4js_config = process.env.LOG4JS_CONFIG ? JSON.parse(process.env.LOG4JS_CONFIG) : undefined
@@ -49,14 +47,18 @@ const TARGET = process.env.TARGET || 'http://localhost:9080',
 
 const csrfMiddleware = csurf({ cookie: true })
 
+// Development configuration start=================================================================
 // Tell express to use the webpack-dev-middleware and use the webpack.config.js
 // configuration file as a base.
-// FIXME: How to remove this from production?
-
-const webpackConfig = require('./webpack.dev.js');
-app.use(webpackDevMiddleware(webpack(webpackConfig), {
-  publicPath: webpackConfig.output.publicPath,
-}));
+if (process.env.NODE_ENV === 'development') {
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpack = require('webpack');
+  const webpackConfig = require('./webpack.dev.js');
+  app.use(webpackDevMiddleware(webpack(webpackConfig), {
+    publicPath: webpackConfig.output.publicPath,
+  }));
+}
+// Development configuration end====================================================================
 
 var exclude = function(path) {
   return function(req, res, next) {
