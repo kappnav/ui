@@ -36,6 +36,7 @@ const logger = log4js.getLogger('server')
 var log4js_config = process.env.LOG4JS_CONFIG ? JSON.parse(process.env.LOG4JS_CONFIG) : undefined
 log4js.configure(log4js_config || 'config/log4js.json')
 
+require('./lib/shared/dust-helpers')
 require('./server/routers/index')(app)
 
 const TARGET = process.env.TARGET || 'http://localhost:9080',
@@ -219,7 +220,8 @@ app.use('/kappnav-ui/openshift/appLauncher.js', (req, res) => {
   })
 })
 
-app.set('view engine', 'ejs')
+app.engine('dust', consolidate.dust)
+app.set('view engine', 'dust')
 app.set('views', __dirname + '/views')
 
 app.locals.manifest = require('./public/webpack-assets.json')
