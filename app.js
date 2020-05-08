@@ -36,7 +36,6 @@ const logger = log4js.getLogger('server')
 var log4js_config = process.env.LOG4JS_CONFIG ? JSON.parse(process.env.LOG4JS_CONFIG) : undefined
 log4js.configure(log4js_config || 'config/log4js.json')
 
-require('./lib/shared/dust-helpers')
 require('./server/routers/index')(app)
 
 const TARGET = process.env.TARGET || 'http://localhost:9080',
@@ -53,6 +52,17 @@ var exclude = function(path) {
       return next()
     }
   }
+}
+
+// Method that will return the path to the NLS file based on the locale
+// from the HTTP request
+const getNLSFilePath = (request) => {
+  const relativePath = `./nls/kappnav.properties`;
+  require(relativePath);
+
+  const bundlePath = path.join(__dirname, relativePath);
+  const locale = i18n._resolveBundle(bundlePath, i18n.locale(request)).locale;
+  return `nls/kappnav${locale ? '_' + locale.replace('-', '_') : ''}.js`;
 }
 
 //Redirect / to /kappnav-ui, (because the auth proxy sidecar redirects to /)
@@ -220,8 +230,7 @@ app.use('/kappnav-ui/openshift/appLauncher.js', (req, res) => {
   })
 })
 
-app.engine('dust', consolidate.dust)
-app.set('view engine', 'dust')
+app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 
 app.locals.manifest = require('./public/webpack-assets.json')
@@ -235,7 +244,9 @@ app.get('*', (req, res) => {
   // eslint-disable-next-line quotes
   res.setHeader('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' blob: https://"+req.headers['host']+"/*; frame-ancestors 'self'")
   logger.debug('APPNAV_CONFIGMAP_NAMESPACE is : ' + APPNAV_CONFIGMAP_NAMESPACE + ' CONTEXT_PATH is : ' + CONTEXT_PATH)
+
   res.render('index', {
+    nlsMsgsFilePath: getNLSFilePath(req),
     myLocale: i18n.locale(req),
     kube: KUBE_ENV,
     appnavConfigmapNamespace: APPNAV_CONFIGMAP_NAMESPACE,
@@ -245,7 +256,6 @@ app.get('*', (req, res) => {
     displayUser : req.user
   })
 })
-
 
 const port = process.env.PORT || config.httpPort
 
