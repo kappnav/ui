@@ -316,6 +316,8 @@ class ComponentView extends Component {
       components.push(eachComponent)
     })
     componentViewReduxData["components"] = components
+    // Storing the redux data into localStorage
+    localStorage.setItem('componentViewReduxData',   JSON.stringify(componentViewReduxData))
     //calling the dispatcher function to load the redux store
     this.props.fetchApplicationComponents(componentViewReduxData)
   }
