@@ -16,7 +16,6 @@ COPY .babelrc /app/
 COPY config /app/config
 COPY .eslintignore /app/
 COPY .eslintrc.json /app/
-COPY lib /app/lib
 COPY server /app/server
 COPY templates /app/templates
 COPY nls /app/nls
@@ -114,7 +113,6 @@ WORKDIR /opt/ibm/app-nav-ui/app
 
 COPY --from=buildapp --chown=1001:0 /app/app.js .
 COPY --from=buildapp --chown=1001:0 /app/config ./config
-COPY --from=buildapp --chown=1001:0 /app/lib ./lib
 COPY --from=buildapp --chown=1001:0 /app/nls ./nls
 COPY --from=buildapp --chown=1001:0 /app/node_modules ./node_modules
 COPY --from=buildapp --chown=1001:0 /app/server ./server
