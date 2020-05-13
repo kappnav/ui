@@ -32,6 +32,14 @@ import { CONFIG_CONSTANTS, STATUS_COLORS } from './constants'
  */
 import { SORT_DIRECTION_ASCENDING, SORT_DIRECTION_DESCENDING } from '../actions/constants'
 
+//The controller can be used to stop fetch's to improve performance
+const controller = new AbortController()
+const { signal } = controller
+
+export const getController = () => {
+  return controller
+}
+
 export const getToken = () => {
   var token = null
   try{
@@ -245,8 +253,10 @@ export const performUrlAction = (urlPattern, openWindow, kind, name, namespace, 
     const apiVersionQueryParam = apiVersion ? '&apiVersion='+encodeURIComponent(apiVersion) : ''
 
     //expand the url
-    fetch('/kappnav/resource/' + encodeURIComponent(name)+'/'+kind+'?action-pattern='+encodeURIComponent(urlPattern)+'&namespace='+encodeURIComponent(namespace)+apiVersionQueryParam)
-      .then(response => {
+     fetch('/kappnav/resource/' + encodeURIComponent(name) + '/' + kind + '?action-pattern='
+                                + encodeURIComponent(urlPattern) + '&namespace='
+                                + encodeURIComponent(namespace) + apiVersionQueryParam, {signal}
+	 ).then(response => {
         if (!response.ok) {
         //Failed to get a link back
         //Todo: Decide how to display this error to the user
