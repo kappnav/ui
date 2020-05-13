@@ -83,7 +83,7 @@ module.exports = {
       },
       {
         test: /\.woff2?$/,
-        loader: 'file-loader?name=fonts/[name].[ext]',
+        loader: 'file-loader',
       },
       {
         test: /\.properties$/,
@@ -181,7 +181,6 @@ module.exports = {
       [{ from: './node_modules/carbon-icons/dist/carbon-icons.svg', to: './graphics' },
         { from: './graphics/*.svg', to: './graphics', flatten: true },
         { from: './graphics/*.png', to: './graphics', flatten: true },
-        { from: './fonts', to: './fonts' },
       ],
     ),
     new VersionFile({
