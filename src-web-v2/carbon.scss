@@ -1,5 +1,5 @@
 //
-// This file should only contain settings for IBM Carbon
+// This file should only contain supported settings for IBM Carbon
 //
 
 // Configure a carbon color theme
@@ -11,6 +11,8 @@ $carbon--theme: $carbon--theme--g10;
 $css--font-face: false;
 @import 'carbon-components/scss/globals/scss/styles.scss';
 
+// Configure carbon-components to use a self-hosted font file
+// from node module @ibm/plex
 @font-face {
   font-family: 'IBM Plex Sans';
   font-weight: 400;

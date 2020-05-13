@@ -19,18 +19,17 @@
  
   <head>
     <meta charset="UTF-8">
-    <link rel='stylesheet' href='<%= contextPath %>/<%= manifest.common.css %>'>
+    <link rel='stylesheet' href='<%= contextPath %>/<%= manifest.carbon.css %>'>
     <link rel='stylesheet' href='<%= contextPath %>/<%= manifest.main.css %>'>
     <link rel='icon' href="<%= contextPath %>/graphics/KAppNavLogo_1x.png">
   </head>
 
   <body aria-label='<%= title %>'>
-    <div id="app"></div>
+    <div id="main"></div>
     <script src='<%= contextPath %>/<%= nlsMsgsFilePath %>'></script>
     <script src='<%= contextPath %>/<%= manifest.vendorappnav.js %>'></script>
     <script src='<%= contextPath %>/<%= manifest.main.js %>'></script>
-    <script src='<%= contextPath %>/<%= manifest.common.js %>'></script>
-    
+    <script src='<%= contextPath %>/<%= manifest.carbon.js %>'></script>
   </body>
 
 </html>
