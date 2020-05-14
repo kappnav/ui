@@ -154,6 +154,14 @@ export const transform = (field, optional, handleChange, event) => {
   handleChange(field, optional, event.target.value)
 }
 
+export const transformMultiSelect = (field, optional, handleChange, event) => {
+  var selectedItemsValue = ''
+  event.selectedItems.map((selectedItem) => {
+    selectedItemsValue += selectedItem.text + ','
+  })
+  handleChange(field, optional, selectedItemsValue.replace(/,\s*$/, ""))
+}
+
 class ActionModal extends React.PureComponent {
 
   constructor (props){
@@ -182,10 +190,6 @@ class ActionModal extends React.PureComponent {
       return {text: value, id: value};
     });
     return arrayOfItems;
-  }
-
-  updateSelectedValues = (newValues) => {
-
   }
 
   render() {
@@ -252,7 +256,7 @@ class ActionModal extends React.PureComponent {
                         label={field.label}
                         items = {this.createFiltersForMultiSelectItems(field.values)}
                         itemToString={item => (item ? item.text : '')}
-                        onChange={(event) => {this.updateSelectedValues(event.selectedItems)}}
+                        onChange={transformMultiSelect.bind(null, field.name, field.optional, onChange)}
                       />
                     </FieldWrapper>
                   )
