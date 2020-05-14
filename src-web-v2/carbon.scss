@@ -1,18 +1,21 @@
 //
-// This file should only contain supported settings for IBM Carbon
+// This file should only contain _supported_ settings for IBM Carbon
 //
 
 // Configure a carbon color theme
+// src: https://www.carbondesignsystem.com/guidelines/themes/
 @import '@carbon/themes/scss/themes';
 $carbon--theme: $carbon--theme--g10;
 @include carbon--theme();
 
 // Disable carbon from fetching font files from external sources
+// src: https://github.com/carbon-design-system/carbon/blob/master/docs/guides/sass.md#global-flags
 $css--font-face: false;
 @import 'carbon-components/scss/globals/scss/styles.scss';
 
 // Configure carbon-components to use a self-hosted font file
 // from node module @ibm/plex
+// src: https://github.com/carbon-design-system/carbon/blob/master/docs/guides/ibm-plex.md#self-hosted
 @font-face {
   font-family: 'IBM Plex Sans';
   font-weight: 400;
