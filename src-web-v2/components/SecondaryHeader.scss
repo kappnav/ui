@@ -1,0 +1,17 @@
+.kv--span > * {
+  display: inline-block;
+}
+
+.kv--dropdown {  
+  width: 200px; // 200px from carbon-react storybook
+
+  .bx--dropdown {
+    border: 1px solid #0f62fe;
+
+    [role=button] * {
+      // Change text/icon color in Carbon <Dropdown>
+      color: #0f62fe;
+      fill: #0f62fe;
+    }
+  }
+}
