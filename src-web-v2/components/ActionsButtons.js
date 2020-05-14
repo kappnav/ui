@@ -24,6 +24,8 @@ let buttonProps = {
   iconDescription: 'Placeholder',
 };
 
+let disableRemoveButton = false;
+
 export class ActionsButtons extends PureComponent {
   constructor(props) {
     super();
@@ -31,9 +33,10 @@ export class ActionsButtons extends PureComponent {
   }
 
   render() {
+    const { disableRemoveButton } = this.props;
     return (
       <span className="bx--btn-set">
-        <Button {...buttonProps} iconDescription={msgs.get('table.actions.edit')} renderIcon={Edit20} />
+        {!disableRemoveButton && <Button {...buttonProps} iconDescription={msgs.get('table.actions.edit')} renderIcon={Edit20} />}
         <Button {...buttonProps} iconDescription={msgs.get('table.actions.remove')} renderIcon={TrashCan20} />
         <ActionsDropdownMenu />
       </span>

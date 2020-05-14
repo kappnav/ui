@@ -24,7 +24,7 @@ import {
 } from '@carbon/icons-react';
 
 import {
-  ActionsDropdownMenu,
+  ActionsButtons,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
@@ -136,7 +136,7 @@ export default class LandingPage extends PureComponent {
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>
                           {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                          {cell.info.header === 'action' ? <ActionsDropdownMenu /> : <span>cell.value</span>}
+                          {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>cell.value</span>}
                         </TableCell>
                       ))}
                     </TableExpandRow>

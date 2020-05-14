@@ -27,7 +27,7 @@ import {
 } from '@carbon/icons-react';
 
 import {
-  ActionsDropdownMenu,
+  ActionsButtons,
   SecondaryHeader,
 } from '../components';
 
@@ -145,7 +145,7 @@ export default class SingleApplication extends PureComponent {
                             <span>
                               {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
                               {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                              {cell.info.header === 'action' ? <ActionsDropdownMenu /> : cell.value}
+                              {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
                             </span>
                           </TableCell>
                         ))}
