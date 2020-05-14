@@ -19,7 +19,7 @@
 'use strict'
 
 import React from 'react'
-import { Form, Modal, InlineNotification, TextInput, Select, SelectItem } from 'carbon-components-react'
+import { Form, Modal, InlineNotification, TextInput, Select, SelectItem, MultiSelect } from 'carbon-components-react'
 import msgs from '../../../../nls/kappnav.properties'
 import { FieldWrapper } from '../common/FormField'
 import { getToken } from '../../../actions/common'
@@ -177,6 +177,17 @@ class ActionModal extends React.PureComponent {
     return true
   }
 
+  createFiltersForMultiSelectItems = (values) => {
+    const arrayOfItems = values.map(value => {
+      return {text: value, id: value};
+    });
+    return arrayOfItems;
+  }
+
+  updateSelectedValues = (newValues) => {
+
+  }
+
   render() {
     const { open, label, data, onChange, clearForm, submitForm, form, input, reqErrorMsg, submitNoInput } = this.props
 
@@ -214,7 +225,7 @@ class ActionModal extends React.PureComponent {
             {reqErrorMsg && reqErrorMsg.length > 0 &&
               reqErrorMsg.map((err,key) => <InlineNotification key={key} kind='error' title='' subtitle={err} iconDescription={msgs.get('svg.description.error')} />)
             }
-            <div>
+            <div className = "action-modal-content">
             <Form>
             {fields && fields.map((field, key) =>
               {
@@ -232,7 +243,21 @@ class ActionModal extends React.PureComponent {
                         invalidText={` ${msgs.get('formerror.required')}`} />
                     </FieldWrapper>
                   )
-                } else {
+                }
+                else if (field.type == "multiselect") {
+                  return (
+                    <FieldWrapper key={'fw' + key} labelText={field.label} content={field.description} required={field.optional == false}>
+                      <MultiSelect
+                        id={field.name}
+                        label={field.label}
+                        items = {this.createFiltersForMultiSelectItems(field.values)}
+                        itemToString={item => (item ? item.text : '')}
+                        onChange={(event) => {this.updateSelectedValues(event.selectedItems)}}
+                      />
+                    </FieldWrapper>
+                  )
+                }
+                else {
                   return (
                     <FieldWrapper key={'fw'+key} labelText={field.label} content={field.description} required={field.optional==false}>
                       <Select
