@@ -146,7 +146,8 @@ export default class LandingPage extends PureComponent {
                           {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
                           {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
                           {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                          {cell.info.header === 'action' ? <ActionsButtons /> : <span>{cell.value}</span>}
+                          {cell.info.header === 'action' && <ActionsButtons /> }
+                          {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
                         </TableCell>
                       ))}
                     </TableExpandRow>
