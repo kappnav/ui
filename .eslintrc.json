@@ -27,11 +27,6 @@
         "import",
         "jsx-a11y"
     ],
-    "settings": {
-        "html/html-extensions": [
-            ".dust"
-        ]
-    },
     "rules": {
         "indent": ["error", 2, {"VariableDeclarator": { "var": 2, "let": 2, "const": 3 }, "MemberExpression": 1 }],
         "quotes": ["error", "single"],
