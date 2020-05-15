@@ -34,8 +34,8 @@ export class LeftNavMenu extends PureComponent {
           <SideNavLink renderIcon={Application20} element={Link} to="/applications">
             {msgs.get('page.applicationView.title')}
           </SideNavLink>
-          <SideNavLink renderIcon={Catalog20} element={Link} to="/jobs">
-            {msgs.get('page.jobsView.title')}
+          <SideNavLink renderIcon={Catalog20} element={Link} to="/actions">
+            {msgs.get('actions.history')}
           </SideNavLink>
         </SideNavItems>
       </SideNav>

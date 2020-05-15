@@ -4,7 +4,7 @@ import {
   Content,
 } from 'carbon-components-react/lib/components/UIShell';
 
-import { LandingPage, SingleApplication, CommandActions } from '.';
+import { LandingPage, SingleApplication, ActionsHistory } from '.';
 
 export default class App extends PureComponent {
   render() {
@@ -13,7 +13,7 @@ export default class App extends PureComponent {
         <Switch>
           <Route exact path={['/', '/applications']} component={LandingPage} />
           <Route path="/applications/" component={SingleApplication} />
-          <Route path="/jobs/" component={CommandActions} />
+          <Route path="/actions/" component={ActionsHistory} />
         </Switch>
       </Content>
     );

@@ -32,8 +32,6 @@ import {
 
 import msgs from '../../nls/kappnav.properties';
 
-require('./CommandActions.scss');
-
 const {
   TableContainer,
   Table,
@@ -113,7 +111,7 @@ const initialRows = [
   },
 ];
 
-export default class LandingPage extends PureComponent {
+export default class ActionsHistory extends PureComponent {
   render() {
     return (
       <DataTable
@@ -127,20 +125,11 @@ export default class LandingPage extends PureComponent {
           getTableProps,
           onInputChange,
         }) => (
-          <TableContainer title={msgs.get('page.jobsView.title')}>
+          <TableContainer title={msgs.get('actions.history')}>
 
             <TableToolbar>
               <TableToolbarContent>
                 <TableToolbarSearch onChange={onInputChange} />
-                <Button
-                  onClick={() => console.log('Clicking')}
-                  size="small"
-                  kind="primary"
-                  renderIcon={Add20}
-                  iconDescription={msgs.get('add.command.action')}
-                >
-                  {msgs.get('add.command.action')}
-                </Button>
               </TableToolbarContent>
             </TableToolbar>
 
