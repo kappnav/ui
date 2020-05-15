@@ -24,12 +24,18 @@ let buttonProps = {
   iconDescription: 'Placeholder',
 };
 
-let disableRemoveButton = false;
-
 export class ActionsButtons extends PureComponent {
+
   constructor(props) {
     super();
-    buttonProps = { ...buttonProps, ...props };
+
+    // Remove the disableRemoveButton to avoid it being
+    // rendered in the DOM when passing buttonProps
+    const { disableRemoveButton, ...rest } = props;
+
+    // Expose the Carbon component props by merging
+    // ...rest into the buttonProps
+    buttonProps = { ...buttonProps, ...rest };
   }
 
   render() {
