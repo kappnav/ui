@@ -20,6 +20,9 @@ svg {
   &.kv--normal-icon {
     margin-right: $statusIconMarginRight;
     fill: green;
+    &.job {
+      fill: #0f62fe;
+    }
   }
   &.kv--warning-icon {
     margin-right: $statusIconMarginRight;
@@ -31,6 +34,13 @@ svg {
   &.kv--problem-icon {
     margin-right: $statusIconMarginRight;
     fill: red;
+  }
+  &.kv--inprogress-icon {
+    margin-right: $statusIconMarginRight;
+    fill: #0f62fe;
+  }
+  &.kv--unknown-icon {
+    margin-right: $statusIconMarginRight;
   }
 }
 

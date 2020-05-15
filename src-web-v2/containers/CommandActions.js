@@ -19,6 +19,9 @@ import {
   Settings20,
   Add20,
   CheckmarkOutline20,
+  ErrorFilled20,
+  Unknown20,
+  Fade20,
   WarningAltInvertedFilled20,
   WarningSquareFilled20,
 } from '@carbon/icons-react';
@@ -28,6 +31,8 @@ import {
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
+
+require('./CommandActions.scss');
 
 const {
   TableContainer,
@@ -77,6 +82,30 @@ const initialRows = [
   {
     id: 'a',
     status: 'Completed',
+    actionName: 'job-name',
+    applicationName: 'default/stocktrader',
+    component: 'default/loyalty-level',
+    age: '27 days ago',
+  },
+  {
+    id: 'b',
+    status: 'Unknown',
+    actionName: 'job-name',
+    applicationName: 'default/stocktrader',
+    component: 'default/loyalty-level',
+    age: '27 days ago',
+  },
+  {
+    id: 'c',
+    status: 'In Progress',
+    actionName: 'job-name',
+    applicationName: 'default/stocktrader',
+    component: 'default/loyalty-level',
+    age: '27 days ago',
+  },
+  {
+    id: 'd',
+    status: 'Failed',
     actionName: 'job-name',
     applicationName: 'default/stocktrader',
     component: 'default/loyalty-level',
@@ -135,8 +164,11 @@ export default class LandingPage extends PureComponent {
                     <TableExpandRow {...getRowProps({ row })}>
                       {row.cells.map((cell) => (
                         <TableCell key={cell.id}>
-                          {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                          {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>cell.value</span>}
+                          {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon job" /> }
+                          {cell.value === 'Failed' && <ErrorFilled20 className="kv--problem-icon" /> }
+                          {cell.value === 'Unknown' && <Unknown20 className="kv--unknown-icon" /> }
+                          {cell.value === 'In Progress' && <Fade20 className="kv--inprogress-icon" /> }
+                          {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>{cell.value}</span>}
                         </TableCell>
                       ))}
                     </TableExpandRow>
