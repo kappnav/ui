@@ -15,6 +15,7 @@ import {
 
 import {
   ActionsButtons,
+  SecondaryHeader,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
@@ -89,63 +90,66 @@ const LandingPage = () => (
       getTableProps,
       onInputChange,
     }) => (
-      <TableContainer title={msgs.get('tabs.applications')}>
+      <>
+        <SecondaryHeader title={msgs.get('tabs.applications')} showBreadCrumb={false} />
 
-        <TableToolbar>
-          <TableToolbarContent>
-            <TableToolbarSearch placeHolderText="Search by name, namespace or component" onChange={onInputChange} />
-            <Button
-              onClick={() => console.log('Clicking')}
-              size="small"
-              kind="primary"
-              renderIcon={Add20}
-              iconDescription={msgs.get('button.application.create')}
-            >
-              {msgs.get('button.application.create')}
-            </Button>
-          </TableToolbarContent>
-        </TableToolbar>
+        <TableContainer>
+          <TableToolbar>
+            <TableToolbarContent>
+              <TableToolbarSearch placeHolderText="Search by name, namespace or component" onChange={onInputChange} />
+              <Button
+                onClick={() => console.log('Clicking')}
+                size="small"
+                kind="primary"
+                renderIcon={Add20}
+                iconDescription={msgs.get('button.application.create')}
+              >
+                {msgs.get('button.application.create')}
+              </Button>
+            </TableToolbarContent>
+          </TableToolbar>
 
-        <Table {...getTableProps()}>
+          <Table {...getTableProps()}>
 
-          <TableHead>
-            <TableRow>
-              {/* add the expand header before all other headers */}
-              <TableExpandHeader />
-              {headers.map((header) => (
-                <TableHeader {...getHeaderProps({ header })}>
-                  {msgs.get(`table.header.${header.key}`)}
-                </TableHeader>
+            <TableHead>
+              <TableRow>
+                {/* add the expand header before all other headers */}
+                <TableExpandHeader />
+                {headers.map((header) => (
+                  <TableHeader {...getHeaderProps({ header })}>
+                    {msgs.get(`table.header.${header.key}`)}
+                  </TableHeader>
+                ))}
+              </TableRow>
+            </TableHead>
+
+            <TableBody>
+              {rows.map((row) => (
+                <React.Fragment key={row.id}>
+                  <TableExpandRow {...getRowProps({ row })}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>
+                        {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                        {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                        {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
+                        {cell.info.header === 'action' && <ActionsButtons /> }
+                        {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
+                      </TableCell>
+                    ))}
+                  </TableExpandRow>
+                  {row.isExpanded && (
+                  <TableExpandedRow colSpan={headers.length + 1}>
+                    <h1>Expandable row content</h1>
+                    <p>Description here</p>
+                  </TableExpandedRow>
+                  )}
+                </React.Fragment>
               ))}
-            </TableRow>
-          </TableHead>
+            </TableBody>
 
-          <TableBody>
-            {rows.map((row) => (
-              <React.Fragment key={row.id}>
-                <TableExpandRow {...getRowProps({ row })}>
-                  {row.cells.map((cell) => (
-                    <TableCell key={cell.id}>
-                      {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                      {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                      {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                      {cell.info.header === 'action' && <ActionsButtons /> }
-                      {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
-                    </TableCell>
-                  ))}
-                </TableExpandRow>
-                {row.isExpanded && (
-                <TableExpandedRow colSpan={headers.length + 1}>
-                  <h1>Expandable row content</h1>
-                  <p>Description here</p>
-                </TableExpandedRow>
-                )}
-              </React.Fragment>
-            ))}
-          </TableBody>
-
-        </Table>
-      </TableContainer>
+          </Table>
+        </TableContainer>
+      </>
     )}
   />
 );

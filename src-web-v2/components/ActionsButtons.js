@@ -45,7 +45,11 @@ const ActionsButtons = (props) => {
 };
 
 ActionsButtons.propTypes = {
-  disableRemoveButton: PropTypes.bool.isRequired,
+  disableRemoveButton: PropTypes.bool,
+};
+
+ActionsButtons.defaultProps = {
+  disableRemoveButton: false,
 };
 
 export default ActionsButtons;

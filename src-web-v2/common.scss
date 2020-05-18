@@ -44,6 +44,11 @@ svg {
   }
 }
 
+// Start - Hack to get cells to vertical align the content to middle
+.bx--data-table td {
+  vertical-align: middle;
+}
 td > * {
   vertical-align: middle;
 }
+// End - Hack to get cells to vertical align the content to middle

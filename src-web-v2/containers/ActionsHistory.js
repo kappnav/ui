@@ -110,7 +110,7 @@ const ActionsHistory = () => (
       onInputChange,
     }) => (
       <>
-        <SecondaryHeader rightButton={<HealthCheckButton />} />
+        <SecondaryHeader title={msgs.get('actions.history')} showBreadCrumb={false} rightButton={<HealthCheckButton />} />
 
         <TableContainer>
 

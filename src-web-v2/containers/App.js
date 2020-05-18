@@ -10,7 +10,7 @@ const App = () => (
   <Content>
     <Switch>
       <Route exact path={['/', '/applications']} component={LandingPage} />
-      <Route path="/applications/:id">
+      <Route path="/applications/:appName">
         <SingleApplication />
       </Route>
       <Route path="/actions/" component={ActionsHistory} />

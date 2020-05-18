@@ -91,7 +91,7 @@ const SingleApplication = () => {
         onInputChange,
       }) => (
         <>
-          <SecondaryHeader title={params.id} rightButton={<DropdownMenu />} />
+          <SecondaryHeader title={params.appName} rightButton={<DropdownMenu />} />
 
           <TableContainer title={msgs.get('page.componentView.title')}>
 
