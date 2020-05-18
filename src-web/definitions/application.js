@@ -457,13 +457,13 @@ export function refreshApplicationComponents(appname, namespace, appNavConfigDat
 
 // display nested application
 function displayApp(appname, namespace) {
-  let url= location.protocol+'//'+location.host+ CONTEXT_PATH + '/applications/'+encodeURIComponent(appname)+'?namespace='+namespace
+  let url= CONTEXT_PATH + '/applications/'+encodeURIComponent(appname)+'?namespace='+namespace
   window.location.href = url;
 }
 
 // display details
 function displayDetail(appname, resourceType, name, namespace, applicationNamespace) {
   //applications and components can be under different namespaces
-  let url= location.protocol+'//'+location.host+ CONTEXT_PATH + '/applications/'+encodeURIComponent(appname)+'/'+resourceType+'/'+encodeURIComponent(name)+'?namespace='+encodeURIComponent(namespace)+'&parentnamespace='+encodeURIComponent(applicationNamespace)
+  let url= CONTEXT_PATH + '/applications/'+encodeURIComponent(appname)+'/'+resourceType+'/'+encodeURIComponent(name)+'?namespace='+encodeURIComponent(namespace)+'&parentnamespace='+encodeURIComponent(applicationNamespace)
   window.location.href = url;
 }

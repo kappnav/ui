@@ -91,7 +91,7 @@ class DetailView extends Component {
           if(breadcrumbs) {
             url = breadcrumbs[breadcrumbs.length-2].url
           }
-          window.location.href = location.protocol+'//'+location.host+url
+          window.location.href = url
         } else {
           //Update Table
           this.fetchData(this.state.resourceName, this.props.baseInfo.selectedNamespace)

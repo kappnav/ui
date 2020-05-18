@@ -29,7 +29,7 @@ const notificationTimeout = 5000 // ms, how long before auto hiding the notifica
 const _caption = 
     <div>
         <h3 className='bx--toast-notification__caption'>{new moment().format('HH:mm:ss   LL')}</h3>
-        <a href={location.protocol + '//' + location.host + CONTEXT_PATH + '/jobs'}>
+        <a href={CONTEXT_PATH + '/jobs'}>
             <Icon className="launch-icon"
                 name='launch'
                 description={msgs.get('toaster.action.icon.label')} 

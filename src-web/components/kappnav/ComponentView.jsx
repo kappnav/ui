@@ -238,7 +238,7 @@ class ComponentView extends Component {
       window.secondaryHeader.refreshCallback = function(result) {
         if(result && result.operation === "delete" && result.name === this.state.name) {
           //we just deleted the RESOURCE_TYPE that we are currently displaying. Go back to the RESOURCE_TYPE list.
-          let url= location.protocol+'//'+location.host + CONTEXT_PATH + '/' + this.getResourcePageUrl(this.props.resourceType);
+          let url = CONTEXT_PATH + '/' + this.getResourcePageUrl(this.props.resourceType);
           window.location.href = url;
         } else {
           var skipComponentReload = true;
