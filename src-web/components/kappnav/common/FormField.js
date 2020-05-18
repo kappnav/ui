@@ -21,6 +21,7 @@
 import React from 'react'
 import { FormItem, FormLabel, Tooltip } from 'carbon-components-react'
 import msgs from '../../../../nls/kappnav.properties'
+import domPurify from 'dompurify'
 
 require('../../../../scss/create-resource.scss')
 
@@ -38,7 +39,7 @@ const LabelTooltip = ({ labelText, content, required }) =>
     triggerText={labelText + (required ? ' *' : '')}
     direction='bottom'
     showIcon={true}>
-    <p dangerouslySetInnerHTML={{ __html: content}} />
+    <p>{domPurify.sanitize(content)}</p>
   </Tooltip>
 
 

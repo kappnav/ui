@@ -76,7 +76,7 @@ class SecondaryHeader extends React.Component {
   }
 
   initiateLogOut = (event) => {
-    let url = location.protocol + '//' + location.host + CONTEXT_PATH + '/logout'
+    let url = CONTEXT_PATH + '/logout'
     window.location.href = url
   }
 

@@ -178,7 +178,7 @@ class NavModal extends React.PureComponent {
                   triggerText=''
                   direction='right'
                   showIcon={true}>
-                  <p dangerouslySetInnerHTML={{ __html: msgs.get('tooltip.jsonmode') }} />
+                  <p>{msgs.get('tooltip.jsonmode')}</p>
                   <div className="bx--tooltip__footer">
                     <a className="bx--link" target="_blank" rel="noopener noreferrer" href={this.props.learnmoreURL}>
                       {msgs.get('tooltip.learn.more')}

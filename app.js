@@ -114,10 +114,20 @@ app.use(CONTEXT_PATH, express.static(STATIC_PATH, {
   }
 }))
 
+function onProxyRes(proxyRes, req, res) {
+  proxyRes.headers['Cache-Control'] = 'no-store'
+  proxyRes.headers['Pragma'] = 'no-cache'
+  proxyRes.headers['Strict-Transport-Security'] = 'max-age=99999999'
+  proxyRes.headers['X-Content-Type-Options'] = 'nosniff'
+  proxyRes.headers['X-XSS-Protection'] = '1'
+  proxyRes.headers['Content-Security-Policy'] = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; frame-ancestors 'self'"
+}
+
 app.use('/kappnav', proxy({
   target: TARGET,
   changeOrigin: true,
-  secure: false
+  secure: false,
+  onProxyRes: onProxyRes
 }))
 
 /* Commenting this out because directing to /oauth/sign_in does not work in ocp 4.3, TODO: find a new logout solution
