@@ -1,84 +1,61 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import {
-  Button,
-  DataTable,
-  OverflowMenu,
-  OverflowMenuItem,
-  Icon,
   Breadcrumb,
   BreadcrumbItem,
-  Dropdown,
 } from 'carbon-components-react';
-
-import msgs from '../../nls/kappnav.properties';
 
 import {
   WarningSquareFilled32,
 } from '@carbon/icons-react';
+import msgs from '../../nls/kappnav.properties';
 
 require('./SecondaryHeader.scss');
 
-const defaultDropDownMenuItems = [
-  {
-    id: 'edit',
-    msgId: 'modal.edit.application',
-  },
-  {
-    id: 'remove',
-    msgId: 'modal.remove.application',
-  },
-  {
-    id: 'openshift',
-    text: 'View in OpenShift',
-  },
-  {
-    id: 'yaml',
-    text: 'View YAML',
-  },
-];
-
-const dropDownMenuProps = {
-  id: 'actions-menu',
-  items: defaultDropDownMenuItems,
-  itemToString: (item) => (item?.msgId ? msgs.get(item?.msgId) : item?.text),
-  label: msgs.get('actions'),
-  size: 'xl',
-  ariaLabel: msgs.get('actions'),
-};
-
-class SecondaryHeader extends PureComponent {
-  render() {
-    return (
-      <>
+const SecondaryHeader = (props) => {
+  const { rightButton, title } = props;
+  return (
+    <div className="kv--secondary-header-container">
+      <div className="kv--secondary-header-left">
         <Breadcrumb noTrailingSlash>
           <BreadcrumbItem>
             <Link to="/applications">{msgs.get('page.applicationView.title')}</Link>
           </BreadcrumbItem>
           <BreadcrumbItem isCurrentPage>
-            {/* Deliberate placeholder here to get the trailing / from Carbon */}
+            {/* Deliberate placeholder here to get the trailing / from Carbon and
+              hide the current page in the breadcrumb */}
             <></>
           </BreadcrumbItem>
         </Breadcrumb>
 
-
         <h1>
-          stock-trader
+          { title }
           {' '}
-          <span><WarningSquareFilled32 className="kv--problem-icon" /> Problem</span>
-          <div className="kv--dropdown">
-            <Dropdown {...dropDownMenuProps} />
-          </div>
+          <span>
+            <WarningSquareFilled32 className="kv--problem-icon" />
+            {' '}
+            Problem
+          </span>
+
         </h1>
 
         <span className="kv--span">
           <h6>Namespace</h6>
           <p>Fake Namespace</p>
         </span>
-      </>
-    );
-  }
-}
+      </div>
+      <div className="kv--secondary-header-right">
+        {rightButton}
+      </div>
+    </div>
+  );
+};
+
+SecondaryHeader.propTypes = {
+  rightButton: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 export default SecondaryHeader;

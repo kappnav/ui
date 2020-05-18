@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   HeaderContainer,
@@ -16,39 +16,37 @@ import {
 
 import App from './App';
 
-export default class TopNavBar extends PureComponent {
-  render() {
-    return (
-      <div className="container">
-        <HeaderContainer
-          isSideNavExpanded={false}
-          render={({ isSideNavExpanded, onClickSideNavExpand }) => (
-            <>
-              <Header aria-label="IBM Application Navigator">
-                <SkipToContent />
+const TopNavBar = () => (
+  <div className="container">
+    <HeaderContainer
+      isSideNavExpanded={false}
+      render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+        <>
+          <Header aria-label="IBM Application Navigator">
+            <SkipToContent />
 
-                <HeaderMenuButton
-                  aria-label="Open menu"
-                  onClick={onClickSideNavExpand}
-                  isActive={isSideNavExpanded}
-                  isCollapsible
-                />
+            <HeaderMenuButton
+              aria-label="Open menu"
+              onClick={onClickSideNavExpand}
+              isActive={isSideNavExpanded}
+              isCollapsible
+            />
 
-                <LeftNavMenu expanded={isSideNavExpanded} />
+            <LeftNavMenu expanded={isSideNavExpanded} />
 
-                <HeaderName element={Link} to="/" prefix="IBM">
-                  Application Navigator
-                </HeaderName>
+            <HeaderName element={Link} to="/" prefix="IBM">
+              Application Navigator
+            </HeaderName>
 
-                <TopNavBarActions />
-              </Header>
+            <TopNavBarActions />
+          </Header>
 
-              {/* The main body of the page */}
-              <App />
-            </>
-          )}
-        />
-      </div>
-    );
-  }
-}
+          {/* The main body of the page */}
+          <App />
+        </>
+      )}
+    />
+  </div>
+);
+
+export default TopNavBar;

@@ -1,33 +1,20 @@
-import React, { PureComponent } from 'react';
-import { Link } from "react-router-dom";
+import React from 'react';
 
 import {
-  Content,
-} from 'carbon-components-react/lib/components/UIShell';
-
-import {
-  Button,
   DataTable,
-  OverflowMenu,
-  OverflowMenuItem,
-  Icon,
 } from 'carbon-components-react';
 
 import {
-  Search20,
-  Edit20,
-  Settings20,
-  Add20,
   CheckmarkOutline20,
   ErrorFilled20,
   Unknown20,
   Fade20,
-  WarningAltInvertedFilled20,
-  WarningSquareFilled20,
 } from '@carbon/icons-react';
 
 import {
   ActionsButtons,
+  SecondaryHeader,
+  HealthCheckButton,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
@@ -46,7 +33,6 @@ const {
   TableExpandHeader,
   TableExpandRow,
   TableExpandedRow,
-  TableToolbarAction,
 } = DataTable;
 
 const defaultHeaders = [
@@ -111,70 +97,72 @@ const initialRows = [
   },
 ];
 
-export default class ActionsHistory extends PureComponent {
-  render() {
-    return (
-      <DataTable
-        headers={defaultHeaders}
-        rows={initialRows}
-        render={({
-          rows,
-          headers,
-          getHeaderProps,
-          getRowProps,
-          getTableProps,
-          onInputChange,
-        }) => (
-          <TableContainer title={msgs.get('actions.history')}>
+const ActionsHistory = () => (
+  <DataTable
+    headers={defaultHeaders}
+    rows={initialRows}
+    render={({
+      rows,
+      headers,
+      getHeaderProps,
+      getRowProps,
+      getTableProps,
+      onInputChange,
+    }) => (
+      <>
+        <SecondaryHeader rightButton={<HealthCheckButton />} />
 
-            <TableToolbar>
-              <TableToolbarContent>
-                <TableToolbarSearch onChange={onInputChange} />
-              </TableToolbarContent>
-            </TableToolbar>
+        <TableContainer>
 
-            <Table {...getTableProps()}>
+          <TableToolbar>
+            <TableToolbarContent>
+              <TableToolbarSearch onChange={onInputChange} />
+            </TableToolbarContent>
+          </TableToolbar>
 
-              <TableHead>
-                <TableRow>
-                  {/* add the expand header before all other headers */}
-                  <TableExpandHeader />
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>
-                      {msgs.get(`table.header.${header.key}`)}
-                    </TableHeader>
-                  ))}
-                </TableRow>
-              </TableHead>
+          <Table {...getTableProps()}>
 
-              <TableBody>
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>
-                          {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon job" /> }
-                          {cell.value === 'Failed' && <ErrorFilled20 className="kv--problem-icon" /> }
-                          {cell.value === 'Unknown' && <Unknown20 className="kv--unknown-icon" /> }
-                          {cell.value === 'In Progress' && <Fade20 className="kv--inprogress-icon" /> }
-                          {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>{cell.value}</span>}
-                        </TableCell>
-                      ))}
-                    </TableExpandRow>
-                    {row.isExpanded && (
-                    <TableExpandedRow colSpan={headers.length + 1}>
-                      <h1>Expandable row content</h1>
-                      <p>Description here</p>
-                    </TableExpandedRow>
-                    )}
-                  </React.Fragment>
+            <TableHead>
+              <TableRow>
+                {/* add the expand header before all other headers */}
+                <TableExpandHeader />
+                {headers.map((header) => (
+                  <TableHeader {...getHeaderProps({ header })}>
+                    {msgs.get(`table.header.${header.key}`)}
+                  </TableHeader>
                 ))}
-              </TableBody>
+              </TableRow>
+            </TableHead>
 
-            </Table>
-          </TableContainer>
-        )}
-      />
-    );
-  }
-}
+            <TableBody>
+              {rows.map((row) => (
+                <React.Fragment key={row.id}>
+                  <TableExpandRow {...getRowProps({ row })}>
+                    {row.cells.map((cell) => (
+                      <TableCell key={cell.id}>
+                        {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon job" /> }
+                        {cell.value === 'Failed' && <ErrorFilled20 className="kv--problem-icon" /> }
+                        {cell.value === 'Unknown' && <Unknown20 className="kv--unknown-icon" /> }
+                        {cell.value === 'In Progress' && <Fade20 className="kv--inprogress-icon" /> }
+                        {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>{cell.value}</span>}
+                      </TableCell>
+                    ))}
+                  </TableExpandRow>
+                  {row.isExpanded && (
+                  <TableExpandedRow colSpan={headers.length + 1}>
+                    <h1>Expandable row content</h1>
+                    <p>Description here</p>
+                  </TableExpandedRow>
+                  )}
+                </React.Fragment>
+              ))}
+            </TableBody>
+
+          </Table>
+        </TableContainer>
+      </>
+    )}
+  />
+);
+
+export default ActionsHistory;

@@ -1,34 +1,20 @@
-import React, { PureComponent } from 'react';
-import { Link } from "react-router-dom";
-
-import {
-  Content,
-} from 'carbon-components-react/lib/components/UIShell';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
   DataTable,
-  OverflowMenu,
-  OverflowMenuItem,
-  Icon,
 } from 'carbon-components-react';
 
 import {
-  Search20,
-  Edit20,
-  Settings20,
   Add20,
   CheckmarkOutline20,
   WarningAltInvertedFilled20,
   WarningSquareFilled20,
-  CheckmarkOutline16,
-  WarningAltInvertedFilled16,
-  WarningSquareFilled16,
 } from '@carbon/icons-react';
 
 import {
   ActionsButtons,
-  ActionsDropdownMenu,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
@@ -49,7 +35,6 @@ const {
   TableExpandHeader,
   TableExpandRow,
   TableExpandedRow,
-  TableToolbarAction,
 } = DataTable;
 
 const defaultHeaders = [
@@ -92,79 +77,77 @@ const initialRows = [
   },
 ];
 
-export default class LandingPage extends PureComponent {
-  render() {
-    return (
-      <DataTable
-        headers={defaultHeaders}
-        rows={initialRows}
-        render={({
-          rows,
-          headers,
-          getHeaderProps,
-          getRowProps,
-          getTableProps,
-          onInputChange,
-        }) => (
-          <TableContainer title={msgs.get('tabs.applications')}>
+const LandingPage = () => (
+  <DataTable
+    headers={defaultHeaders}
+    rows={initialRows}
+    render={({
+      rows,
+      headers,
+      getHeaderProps,
+      getRowProps,
+      getTableProps,
+      onInputChange,
+    }) => (
+      <TableContainer title={msgs.get('tabs.applications')}>
 
-            <TableToolbar>
-              <TableToolbarContent>
-                <TableToolbarSearch placeHolderText="Search by name, namespace or component" onChange={onInputChange} />
-                <Button
-                  onClick={() => console.log('Clicking')}
-                  size="small"
-                  kind="primary"
-                  renderIcon={Add20}
-                  iconDescription={msgs.get('button.application.create')}
-                >
-                  {msgs.get('button.application.create')}
-                </Button>
-              </TableToolbarContent>
-            </TableToolbar>
+        <TableToolbar>
+          <TableToolbarContent>
+            <TableToolbarSearch placeHolderText="Search by name, namespace or component" onChange={onInputChange} />
+            <Button
+              onClick={() => console.log('Clicking')}
+              size="small"
+              kind="primary"
+              renderIcon={Add20}
+              iconDescription={msgs.get('button.application.create')}
+            >
+              {msgs.get('button.application.create')}
+            </Button>
+          </TableToolbarContent>
+        </TableToolbar>
 
-            <Table {...getTableProps()}>
+        <Table {...getTableProps()}>
 
-              <TableHead>
-                <TableRow>
-                  {/* add the expand header before all other headers */}
-                  <TableExpandHeader />
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>
-                      {msgs.get(`table.header.${header.key}`)}
-                    </TableHeader>
+          <TableHead>
+            <TableRow>
+              {/* add the expand header before all other headers */}
+              <TableExpandHeader />
+              {headers.map((header) => (
+                <TableHeader {...getHeaderProps({ header })}>
+                  {msgs.get(`table.header.${header.key}`)}
+                </TableHeader>
+              ))}
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
+            {rows.map((row) => (
+              <React.Fragment key={row.id}>
+                <TableExpandRow {...getRowProps({ row })}>
+                  {row.cells.map((cell) => (
+                    <TableCell key={cell.id}>
+                      {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                      {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                      {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
+                      {cell.info.header === 'action' && <ActionsButtons /> }
+                      {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
+                    </TableCell>
                   ))}
-                </TableRow>
-              </TableHead>
+                </TableExpandRow>
+                {row.isExpanded && (
+                <TableExpandedRow colSpan={headers.length + 1}>
+                  <h1>Expandable row content</h1>
+                  <p>Description here</p>
+                </TableExpandedRow>
+                )}
+              </React.Fragment>
+            ))}
+          </TableBody>
 
-              <TableBody>
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>
-                          {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                          {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                          {cell.value === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
-                          {cell.info.header === 'action' && <ActionsButtons /> }
-                          {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
-                        </TableCell>
-                      ))}
-                    </TableExpandRow>
-                    {row.isExpanded && (
-                    <TableExpandedRow colSpan={headers.length + 1}>
-                      <h1>Expandable row content</h1>
-                      <p>Description here</p>
-                    </TableExpandedRow>
-                    )}
-                  </React.Fragment>
-                ))}
-              </TableBody>
+        </Table>
+      </TableContainer>
+    )}
+  />
+);
 
-            </Table>
-          </TableContainer>
-        )}
-      />
-    );
-  }
-}
+export default LandingPage;

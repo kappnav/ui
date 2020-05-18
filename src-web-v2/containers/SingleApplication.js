@@ -1,34 +1,22 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
-import { Link } from 'react-router-dom';
-
-import {
-  Content,
-} from 'carbon-components-react/lib/components/UIShell';
+import { useParams } from 'react-router-dom';
 
 import {
   Button,
   DataTable,
-  OverflowMenu,
-  OverflowMenuItem,
-  Icon,
-  Breadcrumb,
-  BreadcrumbItem,
 } from 'carbon-components-react';
 
 import {
-  Search20,
-  Edit20,
-  Settings20,
   Add20,
   CheckmarkOutline20,
   WarningAltInvertedFilled20,
-  WarningSquareFilled20,
 } from '@carbon/icons-react';
 
 import {
   ActionsButtons,
   SecondaryHeader,
+  DropdownMenu,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
@@ -47,7 +35,6 @@ const {
   TableExpandHeader,
   TableExpandRow,
   TableExpandedRow,
-  TableToolbarAction,
 } = DataTable;
 
 const defaultHeaders = [
@@ -88,83 +75,85 @@ const initialRows = [
   },
 ];
 
-export default class SingleApplication extends PureComponent {
-  render() {
-    return (
-      <DataTable
-        headers={defaultHeaders}
-        rows={initialRows}
-        render={({
-          rows,
-          headers,
-          getHeaderProps,
-          getRowProps,
-          getTableProps,
-          onInputChange,
-        }) => (
-          <>
-            <SecondaryHeader />
+const SingleApplication = () => {
+  const params = useParams();
 
-            <TableContainer title={msgs.get('page.componentView.title')}>
+  return (
+    <DataTable
+      headers={defaultHeaders}
+      rows={initialRows}
+      render={({
+        rows,
+        headers,
+        getHeaderProps,
+        getRowProps,
+        getTableProps,
+        onInputChange,
+      }) => (
+        <>
+          <SecondaryHeader title={params.id} rightButton={<DropdownMenu />} />
 
-              <TableToolbar>
-                <TableToolbarContent>
-                  <TableToolbarSearch onChange={onInputChange} />
-                  <Button
-                    onClick={() => console.log('Clicking')}
-                    size="small"
-                    kind="primary"
-                    renderIcon={Add20}
-                    iconDescription={msgs.get('add.component')}
-                  >
-                    {msgs.get('add.component')}
-                  </Button>
-                </TableToolbarContent>
-              </TableToolbar>
+          <TableContainer title={msgs.get('page.componentView.title')}>
 
-              <Table {...getTableProps()}>
+            <TableToolbar>
+              <TableToolbarContent>
+                <TableToolbarSearch onChange={onInputChange} />
+                <Button
+                  onClick={() => console.log('Clicking')}
+                  size="small"
+                  kind="primary"
+                  renderIcon={Add20}
+                  iconDescription={msgs.get('add.component')}
+                >
+                  {msgs.get('add.component')}
+                </Button>
+              </TableToolbarContent>
+            </TableToolbar>
 
-                <TableHead>
-                  <TableRow>
-                    {/* add the expand header before all other headers */}
-                    <TableExpandHeader />
-                    {headers.map((header) => (
-                      <TableHeader {...getHeaderProps({ header })}>
-                        {msgs.get(`table.header.${header.key}`)}
-                      </TableHeader>
-                    ))}
-                  </TableRow>
-                </TableHead>
+            <Table {...getTableProps()}>
 
-                <TableBody>
-                  {rows.map((row) => (
-                    <React.Fragment key={row.id}>
-                      <TableExpandRow {...getRowProps({ row })}>
-                        {row.cells.map((cell) => (
-                          <TableCell key={cell.id}>
-                            <span>
-                              {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                              {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                              {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
-                            </span>
-                          </TableCell>
-                        ))}
-                      </TableExpandRow>
-                      {row.isExpanded && (
+              <TableHead>
+                <TableRow>
+                  {/* add the expand header before all other headers */}
+                  <TableExpandHeader />
+                  {headers.map((header) => (
+                    <TableHeader {...getHeaderProps({ header })}>
+                      {msgs.get(`table.header.${header.key}`)}
+                    </TableHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {rows.map((row) => (
+                  <React.Fragment key={row.id}>
+                    <TableExpandRow {...getRowProps({ row })}>
+                      {row.cells.map((cell) => (
+                        <TableCell key={cell.id}>
+                          <span>
+                            {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                            {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                            {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
+                          </span>
+                        </TableCell>
+                      ))}
+                    </TableExpandRow>
+                    {row.isExpanded && (
                       <TableExpandedRow colSpan={headers.length + 1}>
                         <h1>Expandable row content</h1>
                         <p>Description here</p>
                       </TableExpandedRow>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </TableBody>
+                    )}
+                  </React.Fragment>
+                ))}
+              </TableBody>
 
-              </Table>
-            </TableContainer>
-          </>
-        )}
-      />
-    );
-  }
-}
+            </Table>
+          </TableContainer>
+        </>
+      )}
+    />
+  );
+};
+
+export default SingleApplication;

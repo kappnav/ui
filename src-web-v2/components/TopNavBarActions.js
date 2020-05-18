@@ -1,11 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import {
   HeaderGlobalBar,
   HeaderGlobalAction,
   HeaderPanel,
-  Switcher,
-  SwitcherItem,
-  SwitcherItemLink,
 } from 'carbon-components-react/lib/components/UIShell';
 
 import {
@@ -14,33 +11,24 @@ import {
   Information20,
 } from '@carbon/icons-react';
 
-class TopNavBarActions extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isRightSideNavExpanded: false,
-    };
-  }
-
-  render() {
-    const { isRightSideNavExpanded } = this.state;
-    return (
-      <>
-        <HeaderGlobalBar>
-          <HeaderGlobalAction aria-label="About">
-            <Information20 />
-          </HeaderGlobalAction>
-          <HeaderGlobalAction aria-label="Notifications Menu" onClick={() => { this.setState({ isRightSideNavExpanded: !isRightSideNavExpanded }); }}>
-            <Notification20 />
-          </HeaderGlobalAction>
-          <HeaderGlobalAction aria-label="User Account Menu" onClick={() => { this.setState({ isRightSideNavExpanded: !isRightSideNavExpanded }); }}>
-            <UserAvatar20 />
-          </HeaderGlobalAction>
-        </HeaderGlobalBar>
-        <HeaderPanel aria-label="Header Panel" expanded={isRightSideNavExpanded} />
-      </>
-    );
-  }
-}
+const TopNavBarActions = () => {
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <>
+      <HeaderGlobalBar>
+        <HeaderGlobalAction aria-label="About">
+          <Information20 />
+        </HeaderGlobalAction>
+        <HeaderGlobalAction aria-label="Notifications Menu" onClick={() => { setExpanded(!expanded); }}>
+          <Notification20 />
+        </HeaderGlobalAction>
+        <HeaderGlobalAction aria-label="User Account Menu" onClick={() => { setExpanded(!expanded); }}>
+          <UserAvatar20 />
+        </HeaderGlobalAction>
+      </HeaderGlobalBar>
+      <HeaderPanel aria-label="Header Panel" expanded={expanded} />
+    </>
+  );
+};
 
 export default TopNavBarActions;
