@@ -117,7 +117,7 @@ const SingleApplication = () => {
                   {/* add the expand header before all other headers */}
                   <TableExpandHeader />
                   {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header })}>
+                    <TableHeader {...getHeaderProps({ header, isSortable: header.key !== 'action' })}>
                       {msgs.get(`table.header.${header.key}`)}
                     </TableHeader>
                   ))}

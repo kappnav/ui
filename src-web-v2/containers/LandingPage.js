@@ -114,7 +114,7 @@ const LandingPage = () => (
             <TableHead>
               <TableRow>
                 {headers.map((header) => (
-                  <TableHeader {...getHeaderProps({ header })}>
+                  <TableHeader {...getHeaderProps({ header, isSortable: header.key !== 'action' })}>
                     {msgs.get(`table.header.${header.key}`)}
                   </TableHeader>
                 ))}
