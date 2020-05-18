@@ -16,12 +16,13 @@
  *
  *****************************************************************/
 
-import 'carbon-components/scss/globals/scss/styles.scss';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { PaginationV2, DataTable, Icon, MultiSelect, Tooltip, Button, InlineNotification } from 'carbon-components-react';
-import { PAGE_SIZES } from '../../../actions/constants';
-import msgs from '../../../../nls/kappnav.properties';
+import 'carbon-components/scss/globals/scss/styles.scss'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { PaginationV2, DataTable, Icon, MultiSelect, Tooltip, Button, InlineNotification } from 'carbon-components-react'
+import { PAGE_SIZES } from '../../../actions/constants'
+import msgs from '../../../../nls/kappnav.properties'
+import { domPurify } from 'dompurify'
 import {updateResourceTableError}  from '../../../reducers/ResourceTableReducer'
 
 require('../../../../scss/table.scss')
@@ -336,7 +337,7 @@ class ResourceTable extends Component {
 									triggerText=''
 									direction='bottom'
 									showIcon={true}>
-									<p dangerouslySetInnerHTML={{ __html: descriptionCell.value }} />
+									<p>{domPurify.sanitize(descriptionCell.value)}</p>
 								</Tooltip>
 							</div>
 						</div>

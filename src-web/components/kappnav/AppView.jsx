@@ -212,7 +212,7 @@ class AppView extends Component {
   }
 
   displayComponents(name) {
-    let url = location.protocol + '//' + location.host + CONTEXT_PATH + '/applications/' + encodeURIComponent(name) + "?namespace=" + encodeURIComponent(props.baseInfo.selectedNamespace)
+    let url = CONTEXT_PATH + '/applications/' + encodeURIComponent(name) + "?namespace=" + encodeURIComponent(props.baseInfo.selectedNamespace)
     window.location.href = url
   }
 
@@ -265,7 +265,7 @@ class AppView extends Component {
         var itemObj = {};
         itemObj.id = item.metadata.uid+"-application"
         itemObj.status = buildStatusHtml(getStatus(item.metadata, appNavConfigData))
-        itemObj.appName = <a href={location.protocol + '//' + location.host + CONTEXT_PATH + '/applications/' + encodeURIComponent(item.metadata.name) + '?namespace=' + item.metadata.namespace}>{item.metadata.name}</a>
+        itemObj.appName = <a href={CONTEXT_PATH + '/applications/' + encodeURIComponent(item.metadata.name) + '?namespace=' + item.metadata.namespace}>{item.metadata.name}</a>
         itemObj.namespace = item.metadata.namespace
         itemObj.menuAction = getOverflowMenu(item, application["action-map"], applicationResourceData, undefined, undefined)
         if(application.hasOwnProperty("section-map")){

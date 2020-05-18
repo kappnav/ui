@@ -333,7 +333,7 @@ class JobView extends Component {
             itemObj.appName = msgs.get('not.assigned')
           } else {
             //since component and application namespace can be different, hence we will be using the application namespace
-            itemObj.appName = <a href={location.protocol + '//' + location.host + CONTEXT_PATH + '/applications/' + encodeURIComponent(applicationName) + '?namespace=' + metadataLabel['kappnav-job-application-namespace']}>
+            itemObj.appName = <a href = {CONTEXT_PATH + '/applications/' + encodeURIComponent(applicationName) + '?namespace=' + metadataLabel['kappnav-job-application-namespace']}>
               {metadataLabel['kappnav-job-application-namespace'] + '/' + applicationName}
             </a>
           }
