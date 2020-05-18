@@ -113,8 +113,6 @@ const LandingPage = () => (
 
             <TableHead>
               <TableRow>
-                {/* add the expand header before all other headers */}
-                <TableExpandHeader />
                 {headers.map((header) => (
                   <TableHeader {...getHeaderProps({ header })}>
                     {msgs.get(`table.header.${header.key}`)}
@@ -126,7 +124,7 @@ const LandingPage = () => (
             <TableBody>
               {rows.map((row) => (
                 <React.Fragment key={row.id}>
-                  <TableExpandRow {...getRowProps({ row })}>
+                  <TableRow {...getRowProps({ row })}>
                     {row.cells.map((cell) => (
                       <TableCell key={cell.id}>
                         {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
@@ -136,13 +134,7 @@ const LandingPage = () => (
                         {cell.info.header === 'name' ? <Link to={`applications/${cell.value}`}>{cell.value}</Link> : cell.value}
                       </TableCell>
                     ))}
-                  </TableExpandRow>
-                  {row.isExpanded && (
-                  <TableExpandedRow colSpan={headers.length + 1}>
-                    <h1>Expandable row content</h1>
-                    <p>Description here</p>
-                  </TableExpandedRow>
-                  )}
+                  </TableRow>
                 </React.Fragment>
               ))}
             </TableBody>

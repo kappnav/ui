@@ -124,8 +124,6 @@ const ActionsHistory = () => (
 
             <TableHead>
               <TableRow>
-                {/* add the expand header before all other headers */}
-                <TableExpandHeader />
                 {headers.map((header) => (
                   <TableHeader {...getHeaderProps({ header })}>
                     {msgs.get(`table.header.${header.key}`)}
@@ -137,7 +135,7 @@ const ActionsHistory = () => (
             <TableBody>
               {rows.map((row) => (
                 <React.Fragment key={row.id}>
-                  <TableExpandRow {...getRowProps({ row })}>
+                  <TableRow {...getRowProps({ row })}>
                     {row.cells.map((cell) => (
                       <TableCell key={cell.id}>
                         {cell.value === 'Completed' && <CheckmarkOutline20 className="kv--normal-icon job" /> }
@@ -147,13 +145,7 @@ const ActionsHistory = () => (
                         {cell.info.header === 'action' ? <ActionsButtons disableRemoveButton /> : <span>{cell.value}</span>}
                       </TableCell>
                     ))}
-                  </TableExpandRow>
-                  {row.isExpanded && (
-                  <TableExpandedRow colSpan={headers.length + 1}>
-                    <h1>Expandable row content</h1>
-                    <p>Description here</p>
-                  </TableExpandedRow>
-                  )}
+                  </TableRow>
                 </React.Fragment>
               ))}
             </TableBody>
