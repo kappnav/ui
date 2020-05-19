@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Button,
+  ModalWrapper,
 } from 'carbon-components-react';
 
 import {
@@ -12,16 +12,39 @@ import msgs from '../../nls/kappnav.properties';
 
 require('./HealthCheckButton.scss');
 
-const buttonProps = {
-  kind: 'tertiary',
-  iconDescription: msgs.get('run.health.check'),
-  className: 'kv--btn',
+// const buttonProps = {
+//   kind: 'tertiary',
+//   iconDescription: msgs.get('run.health.check'),
+//   className: 'kv--btn',
+// };
+
+const submitHealthCheck = () => {
+  // TODO: Fire off a notification!
+  console.log("Health check submitted!");
+  // TODO: Add REST API call!
+  return true; // This is needed for the ModalWrapper's shouldCloseAfterSubmit to work
+};
+
+const modalWrapperProps = {
+  buttonTriggerText: msgs.get('run.health.check'),
+  renderTriggerButtonIcon: HealthCross20,
+  primaryButtonText: 'Run', // i18n needed
+  handleSubmit: submitHealthCheck,
+  shouldCloseAfterSubmit: true,
+  modalHeading: 'Health Check', // i18n needed
 };
 
 const HealthCheckButton = () => (
-  <Button {...buttonProps} renderIcon={HealthCross20}>
-    {msgs.get('run.health.check')}
-  </Button>
+  <ModalWrapper {...modalWrapperProps}>
+    <p className="bx--modal-content__text">
+      The health check action will take inventory of all the assets managed my kAppNav.  A report 
+      file will be generated containing the inventory report.
+    </p>
+  </ModalWrapper>
+
+  // <Button {...buttonProps} renderIcon={HealthCross20}>
+  //   {msgs.get('run.health.check')}
+  // </Button>
 );
 
 export default HealthCheckButton;
