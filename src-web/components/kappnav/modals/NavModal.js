@@ -34,6 +34,7 @@ import msgs from '../../../../nls/kappnav.properties'
 import {REQUEST_STATUS} from '../../../actions/constants'
 import lodash from 'lodash'
 import handleKeyboardEvent from '../../../util/accessibility'
+import domPurify from 'dompurify'
 
 require('../../../../scss/modal.scss')
 
@@ -486,7 +487,7 @@ class NavModalForm extends React.PureComponent {
               triggerText=''
               direction='right'
               showIcon={true}>
-              <p dangerouslySetInnerHTML={{ __html: item.tooltip }} />
+              <p>{domPurify.sanitize(item.tooltip)}</p>
               <div className="bx--tooltip__footer">
                 <a className="bx--link" target="_blank" rel="noopener noreferrer" href={this.props.learnmoreURL}>
                   {msgs.get('tooltip.learn.more')}

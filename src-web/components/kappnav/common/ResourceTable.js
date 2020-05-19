@@ -22,8 +22,8 @@ import { connect } from 'react-redux'
 import { PaginationV2, DataTable, Icon, MultiSelect, Tooltip, Button, InlineNotification } from 'carbon-components-react'
 import { PAGE_SIZES } from '../../../actions/constants'
 import msgs from '../../../../nls/kappnav.properties'
-import { domPurify } from 'dompurify'
-import {updateResourceTableError}  from '../../../reducers/ResourceTableReducer'
+import domPurify from 'dompurify'
+import {updateResourceTableError} from '../../../reducers/ResourceTableReducer'
 
 require('../../../../scss/table.scss')
 
