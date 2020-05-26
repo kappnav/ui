@@ -15,15 +15,33 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import {
+  applyMiddleware,
+  createStore,
+  compose,
+} from 'redux';
+import thunk from 'redux-thunk';
 import TopNavBar from './containers/TopNavBar';
+
+import reducers from './redux/reducers/index';
 
 require('./common.scss');
 
-/* eslint-disable react/jsx-filename-extension */
+// TODO: This needs to be development mode only
+// https://github.com/zalmoxisus/redux-devtools-extension#13-use-redux-devtools-extension-package-from-npm
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middlewares = [thunk];
+const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(...middlewares)),
+);
 
 render(
-  <Router basename="/kappnav-ui">
-    <TopNavBar />
-  </Router>,
+  <Provider store={store}>
+    <Router basename="/kappnav-ui">
+      <TopNavBar />
+    </Router>
+  </Provider>,
   document.getElementById('main'),
 );
