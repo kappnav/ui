@@ -35,7 +35,7 @@ const BreadCrumb = () => {
           if (index === paths.length - 1) {
             // Do not display the current page in the breadcrumb
             return (
-              <BreadcrumbItem isCurrentPage>
+              <BreadcrumbItem isCurrentPage key={path}>
                 {/* Deliberate placeholder here to get the trailing / from Carbon and
                   hide the current page in the breadcrumb */}
                 <></>
@@ -43,7 +43,7 @@ const BreadCrumb = () => {
             );
           }
           return (
-            <BreadcrumbItem>
+            <BreadcrumbItem key={path}>
               {/* FIXME: This is still hardcoded to a message key.  The to={} might also
                 be lacking ability to handle paths longer than 3  */}
               <Link to={`/${path}`}>{msgs.get('page.applicationView.title')}</Link>
