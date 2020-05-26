@@ -1,0 +1,5 @@
+//
+// Custom React hooks
+//
+// eslint-disable-next-line import/prefer-default-export
+export { default as useInterval } from './useInterval';
