@@ -29,3 +29,14 @@
   transition-duration: 300ms;
   transition-timing-function: cubic-bezier(0.5, 0, 0.1, 1) 0s;
 }
+
+.namespaces .bx--list-box__menu {
+  left: unset;
+  width: 22rem;
+}
+
+.namespaces .bx--list-box__menu .bx--list-box__menu-item {
+  overflow-wrap: anywhere;
+  margin-top: 0.4375rem;
+  margin-bottom: 0.4375rem;
+}
