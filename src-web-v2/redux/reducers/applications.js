@@ -1,6 +1,9 @@
+import _ from 'lodash';
 import {
   FETCH_APPLICATIONS_PENDING, FETCH_APPLICATIONS_SUCCESS, FETCH_APPLICATIONS_ERROR,
 } from '../actions';
+
+import msgs from '../../../nls/kappnav.properties';
 
 const initialState = {
   pending: true,
@@ -23,20 +26,22 @@ const applicationsReducer = (state = initialState, action) => {
   switch (action.type) {
     case FETCH_APPLICATIONS_PENDING:
       return {
-        ...state,
+        ...state, // do this to avoid mutating original state
         pending: true,
       };
     case FETCH_APPLICATIONS_SUCCESS: {
-      const formattedData = formatApplicationData(action.payload);
+      // Avoid any modification to the original arguments, per Redux guidelines
+      const applications = _.cloneDeep(action.payload);
+      const formattedData = formatApplicationData(applications);
       return {
-        ...state,
+        ...state, // do this to avoid mutating original state
         pending: false,
-        data: formattedData, // do this to avoid mutating state
+        data: formattedData,
       };
     }
     case FETCH_APPLICATIONS_ERROR:
       return {
-        ...state,
+        ...state, // do this to avoid mutating original state
         pending: false,
         error: action.error,
       };

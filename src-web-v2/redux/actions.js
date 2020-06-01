@@ -8,6 +8,10 @@ export const FETCH_APPLICATIONS_ERROR = 'FETCH_APPLICATIONS_ERROR';
 export const FETCH_COMMANDS_PENDING = 'FETCH_COMMANDS_PENDING';
 export const FETCH_COMMANDS_SUCCESS = 'FETCH_COMMANDS_SUCCESS';
 export const FETCH_COMMANDS_ERROR = 'FETCH_COMMANDS_ERROR';
+
+export const FETCH_COMPONENTS_PENDING = 'FETCH_COMPONENTS_PENDING';
+export const FETCH_COMPONENTS_SUCCESS = 'FETCH_COMPONENTS_SUCCESS';
+export const FETCH_COMPONENTS_ERROR = 'FETCH_COMPONENTS_ERROR';
 //
 // Action Creators ================================================================================
 //
@@ -47,6 +51,26 @@ export const fetchCommandsSuccess = (commands) => (
 export const fetchCommandsError = (error) => (
   {
     type: FETCH_COMMANDS_ERROR,
+    error: error.message,
+  }
+);
+
+export const fetchComponentsPending = () => (
+  {
+    type: FETCH_COMPONENTS_PENDING,
+  }
+);
+
+export const fetchComponentsSuccess = (components) => (
+  {
+    type: FETCH_COMPONENTS_SUCCESS,
+    payload: components,
+  }
+);
+
+export const fetchComponentsError = (error) => (
+  {
+    type: FETCH_COMPONENTS_ERROR,
     error: error.message,
   }
 );

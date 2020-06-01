@@ -9,11 +9,12 @@ import { LandingPage, SingleApplication, ActionsHistory } from '.';
 const App = () => (
   <Content>
     <Switch>
-      <Route exact path={['/', '/applications']} component={LandingPage} />
+      <Route exact path={['/', '/applications', '/actions']} component={LandingPage} />
       <Route path="/applications/:appName">
         <SingleApplication />
       </Route>
-      <Route path="/actions/" component={ActionsHistory} />
+      {/* FIXME: Delete me when deleting <ActionsHistory> */}
+      {/* <Route path="/actions/" component={ActionsHistory} /> */}
     </Switch>
   </Content>
 );
