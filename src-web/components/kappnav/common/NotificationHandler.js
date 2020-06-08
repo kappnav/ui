@@ -61,7 +61,7 @@ class NotificationHandler extends React.PureComponent {
     render() {
         const { completed_commands } = this.state
         let renderResult = <div id="notification-handler"></div>
-        if(!completed_commands || completed_commands.length === 0) {
+        if(!completed_commands || !completed_commands.commands || completed_commands.commands.length === 0) {
             // return zero notifications, only return the handler
             return renderResult
         } else {
