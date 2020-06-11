@@ -8,7 +8,7 @@ import {
   HealthCross20,
 } from '@carbon/icons-react';
 
-import msgs from '../../nls/kappnav.properties';
+import msgs from '../../../nls/kappnav.properties';
 
 require('./HealthCheckButton.scss');
 

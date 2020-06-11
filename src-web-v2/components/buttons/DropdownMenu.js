@@ -3,7 +3,7 @@ import {
   Dropdown,
 } from 'carbon-components-react';
 
-import msgs from '../../nls/kappnav.properties';
+import msgs from '../../../nls/kappnav.properties';
 
 const defaultDropDownMenuItems = [
   {
