@@ -1,4 +1,5 @@
 # Stage 1: build using node
+# TODO: We might have to upgrade node version due to https://github.com/kappnav/ui/pull/169
 FROM node:8.11.4 as buildapp
 WORKDIR "/app"
 
