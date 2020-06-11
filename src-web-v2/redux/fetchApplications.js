@@ -1,8 +1,9 @@
 import { fetchApplicationsPending, fetchApplicationsSuccess, fetchApplicationsError } from './actions';
+import { defaultOptions } from './defaultFetchOptions';
 
 function fetchApplications() {
   return (dispatch) => {
-    dispatch(fetchApplicationsPending());
+    dispatch(fetchApplicationsPending(), defaultOptions);
     fetch('/kappnav/applications')
       .then((res) => {
         if (!res.ok) {

@@ -5,6 +5,10 @@ export const FETCH_APPLICATIONS_PENDING = 'FETCH_APPLICATIONS_PENDING';
 export const FETCH_APPLICATIONS_SUCCESS = 'FETCH_APPLICATIONS_SUCCESS';
 export const FETCH_APPLICATIONS_ERROR = 'FETCH_APPLICATIONS_ERROR';
 
+export const DELETE_APPLICATIONS_PENDING = 'DELETE_APPLICATIONS_PENDING';
+export const DELETE_APPLICATIONS_SUCCESS = 'DELETE_APPLICATIONS_SUCCESS';
+export const DELETE_APPLICATIONS_ERROR = 'DELETE_APPLICATIONS_ERROR';
+
 export const FETCH_COMMANDS_PENDING = 'FETCH_COMMANDS_PENDING';
 export const FETCH_COMMANDS_SUCCESS = 'FETCH_COMMANDS_SUCCESS';
 export const FETCH_COMMANDS_ERROR = 'FETCH_COMMANDS_ERROR';
@@ -31,6 +35,31 @@ export const fetchApplicationsSuccess = (applications) => (
 export const fetchApplicationsError = (error) => (
   {
     type: FETCH_APPLICATIONS_ERROR,
+    error: error.message,
+  }
+);
+
+export const deleteApplicationPending = () => (
+  {
+    type: DELETE_APPLICATIONS_PENDING,
+  }
+);
+
+/**
+ * @param {String} applicationName - application name
+ * @param {String} applicationNamespace - application's namespace
+ */
+export const deleteApplicationSuccess = (applicationName, applicationNamespace) => (
+  {
+    type: DELETE_APPLICATIONS_SUCCESS,
+    applicationName,
+    applicationNamespace,
+  }
+);
+
+export const deleteApplicationError = (error) => (
+  {
+    type: DELETE_APPLICATIONS_ERROR,
     error: error.message,
   }
 );

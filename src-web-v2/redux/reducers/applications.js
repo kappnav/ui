@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import {
   FETCH_APPLICATIONS_PENDING, FETCH_APPLICATIONS_SUCCESS, FETCH_APPLICATIONS_ERROR,
+  DELETE_APPLICATIONS_PENDING, DELETE_APPLICATIONS_SUCCESS, DELETE_APPLICATIONS_ERROR,
 } from '../actions';
-
-import msgs from '../../../nls/kappnav.properties';
 
 const initialState = {
   pending: true,
@@ -18,6 +17,8 @@ function formatApplicationData(array) {
     name: item.application?.metadata?.name,
     status: item.application?.metadata?.annotations?.['kappnav.status.value'],
     namespace: item.application?.metadata?.namespace,
+    'url-actions': item?.['action-map']?.['url-actions'],
+    'cmd-actions': item?.['action-map']?.['cmd-actions'],
   }));
   return tableRows;
 }
@@ -40,6 +41,29 @@ const applicationsReducer = (state = initialState, action) => {
       };
     }
     case FETCH_APPLICATIONS_ERROR:
+      return {
+        ...state, // do this to avoid mutating original state
+        pending: false,
+        error: action.error,
+      };
+    case DELETE_APPLICATIONS_PENDING:
+      return {
+        ...state, // do this to avoid mutating original state
+        pending: true,
+      };
+    case DELETE_APPLICATIONS_SUCCESS: {
+      const { applicationName, applicationNamespace } = action;
+      // Delete the targeted application from Redux
+      // filter() does not mutate the array on which it is called.
+      const newState = state?.filter(
+        (data) => (data?.name !== applicationName && data?.namespace !== applicationNamespace),
+      );
+      return {
+        ...newState,
+        pending: false,
+      };
+    }
+    case DELETE_APPLICATIONS_ERROR:
       return {
         ...state, // do this to avoid mutating original state
         pending: false,

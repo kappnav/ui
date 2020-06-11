@@ -3,8 +3,6 @@ import {
   FETCH_COMPONENTS_PENDING, FETCH_COMPONENTS_SUCCESS, FETCH_COMPONENTS_ERROR,
 } from '../actions';
 
-import msgs from '../../../nls/kappnav.properties';
-
 const initialState = {
   pending: true,
   data: {},
