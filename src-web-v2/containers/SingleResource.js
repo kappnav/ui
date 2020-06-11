@@ -75,7 +75,7 @@ const initialRows = [
   },
 ];
 
-const SingleApplication = () => {
+const SingleResource = () => {
   const params = useParams();
 
   return (
@@ -156,4 +156,4 @@ const SingleApplication = () => {
   );
 };
 
-export default SingleApplication;
+export default SingleResource;

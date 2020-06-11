@@ -4,17 +4,17 @@ import {
   Content,
 } from 'carbon-components-react/lib/components/UIShell';
 
-import { LandingPage, SingleApplication, ActionsHistory } from '.';
+import { LandingPage, SingleResource } from '.';
 
+// File that handles `react-router-dom` routes
 const App = () => (
   <Content>
     <Switch>
       <Route exact path={['/', '/applications', '/actions']} component={LandingPage} />
       <Route path="/applications/:appName">
-        <SingleApplication />
+        {/* TODO: Implement single resource page */}
+        <SingleResource />
       </Route>
-      {/* FIXME: Delete me when deleting <ActionsHistory> */}
-      {/* <Route path="/actions/" component={ActionsHistory} /> */}
     </Switch>
   </Content>
 );
