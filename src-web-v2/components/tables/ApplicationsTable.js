@@ -43,6 +43,7 @@ const getStatusIcon = (status) => (
     {status === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
     {status === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
     {status === 'Problem' && <WarningSquareFilled20 className="kv--problem-icon" /> }
+    {status}
   </>
 );
 
@@ -66,7 +67,6 @@ const ApplicationResourceTable = () => {
 
   return (
     <ResourceTable
-      actionButtons={<ActionsButtons />}
       tableHeaders={tableHeaders}
       getStatusIcon={getStatusIcon}
       listOfResources={applications}

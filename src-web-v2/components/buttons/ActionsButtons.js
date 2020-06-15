@@ -7,6 +7,7 @@ import {
 } from 'carbon-components-react';
 
 import {
+  Edit20,
   TrashCan20,
 } from '@carbon/icons-react';
 
@@ -18,7 +19,7 @@ import msgs from '../../../nls/kappnav.properties';
 
 require('./ActionButtons.scss');
 
-let buttonProps = {
+const buttonProps = {
   size: 'small',
   hasIconOnly: true,
   kind: 'ghost',
@@ -30,13 +31,9 @@ let buttonProps = {
 
 const ActionsButtons = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Remove the disableRemoveButton to avoid it being
-  // rendered in the DOM when passing buttonProps
-  const { disableRemoveButton, ...rest } = props;
-
-  // Expose the Carbon component props by merging
-  // ...rest into the buttonProps
-  buttonProps = { ...buttonProps, ...rest };
+  const {
+    deletable, editable, urlActions, cmdActions,
+  } = props;
 
   const applicationName = 'FIXME'; // FIXME: Get the appname somewhere
 
@@ -50,12 +47,16 @@ const ActionsButtons = (props) => {
   return (
     <span className="bx--btn-set">
       {
-        !disableRemoveButton
+        editable
+        && <Button {...buttonProps} onClick={() => setIsModalOpen(true)} iconDescription={msgs.get('table.actions.edit')} renderIcon={Edit20} />
+      }
+      {
+        deletable
         && <Button {...buttonProps} onClick={() => setIsModalOpen(true)} iconDescription={msgs.get('table.actions.remove')} renderIcon={TrashCan20} />
       }
       {
         <Modal
-          modalHeading={msgs.get('modal.remove.application')}
+          modalHeading={msgs.get('modal.remove.application')} // FIXME: PII needs to be different between edit/delete
           primaryButtonText={msgs.get('modal.button.remove')}
           secondaryButtonText={msgs.get('modal.button.cancel')}
           modalAriaLabel={msgs.get('modal.remove.confirm', [applicationName])}
@@ -72,17 +73,22 @@ const ActionsButtons = (props) => {
           </p>
         </Modal>
       }
-      <ActionsDropdownMenu />
+      {/* FIXME: Pass in list */}
+      <ActionsDropdownMenu urlActions={urlActions} cmdActions={cmdActions} />
     </span>
   );
 };
 
 ActionsButtons.propTypes = {
-  disableRemoveButton: PropTypes.bool,
+  deletable: PropTypes.bool.isRequired,
+  editable: PropTypes.bool.isRequired,
+  urlActions: PropTypes.arrayOf(PropTypes.object),
+  cmdActions: PropTypes.arrayOf(PropTypes.object),
 };
 
 ActionsButtons.defaultProps = {
-  disableRemoveButton: false,
+  urlActions: [],
+  cmdActions: [],
 };
 
 export default ActionsButtons;

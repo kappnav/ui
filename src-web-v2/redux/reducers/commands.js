@@ -77,6 +77,7 @@ const formatCommmandData = (array) => {
     name: item?.metadata?.annotations?.['kappnav-job-action-text'],
     status: getStatus(item).status, // FIXME: Needs PII
     namespace: item?.metadata?.namespace,
+    deletable: true, // default action for all
   }));
   return tableRows;
 };

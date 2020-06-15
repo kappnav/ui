@@ -1,0 +1,667 @@
+/** ***************************************************************
+ *
+ * Copyright 2020 IBM Corporation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ **************************************************************** */
+
+
+import React from 'react';
+import moment from 'moment';
+import lodash from 'lodash';
+import { Tag, OverflowMenu, OverflowMenuItem } from 'carbon-components-react';
+import msgs from '../../nls/kappnav.properties';
+import { CONFIG_CONSTANTS, STATUS_COLORS } from './constants';
+
+/*
+ * action types
+ *
+ * action name: <NOUN>_<VERB>
+ */
+import { SORT_DIRECTION_ASCENDING, SORT_DIRECTION_DESCENDING } from '../actions/constants';
+
+export const getToken = () => {
+  let token = null;
+  try {
+    token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  } catch (e) {
+    // catch all. do nothing, token will be null
+  }
+  return token;
+};
+
+export const translateKind = (kind) => {
+  if (!kind) {
+    // For whatever reason, during the ReactJS component lifecycle,
+    // this method gets called before the kind is set.  Let's have
+    // defensive code and just return nothing if the parameter is fasley
+    return kind;
+  }
+
+  kind = kind.toLowerCase();
+  kind = kind.replace(/-/g, ''); // remove the dashes (-)
+  const translatedKind = msgs.get(kind);
+
+  return translatedKind === `!${kind}!` ? kind : translatedKind; // don't return a non translated kind
+};
+
+export const getRowSlice = (rowArray, pageNumber, pageSize) => {
+  const totalPages = rowArray.length / pageSize;
+  const firstRowIndex = (pageNumber - 1) * pageSize;
+  let newRows = [];
+
+  if (rowArray.length < pageSize) { // only 1 page to show
+    newRows = rowArray.slice(0);
+  } else if (pageNumber >= totalPages) { // last page
+    newRows = rowArray.slice(firstRowIndex);
+  } else { // somewhere in between
+    newRows = rowArray.slice(firstRowIndex, pageNumber * pageSize);
+  }
+  return newRows;
+};
+
+export const sortColumn = (rowArray, previousSortColumn, previousSortDirection, column) => {
+  const direction = previousSortColumn != column ? SORT_DIRECTION_ASCENDING : previousSortDirection == SORT_DIRECTION_DESCENDING ? SORT_DIRECTION_ASCENDING : SORT_DIRECTION_DESCENDING;
+  return { sortedList: sort(rowArray, direction, column), direction };
+};
+
+export const sort = (rowArray, direction, column) => {
+  rowArray = direction == SORT_DIRECTION_ASCENDING
+    ? rowArray.sort((a, b) => {
+      const aValue = a[column].props
+        ? a[column].props['data-sorttitle'] ? a[column].props['data-sorttitle']
+          : a[column].props.children
+        : a[column];
+      const bValue = b[column].props
+        ? b[column].props['data-sorttitle'] ? b[column].props['data-sorttitle']
+          : b[column].props.children
+        : b[column];
+      return aValue.localeCompare(bValue, undefined, { numeric: true });
+    })
+    : rowArray.sort((a, b) => {
+      const aValue = a[column].props
+        ? a[column].props['data-sorttitle'] ? a[column].props['data-sorttitle']
+          : a[column].props.children
+        : a[column];
+      const bValue = b[column].props
+        ? b[column].props['data-sorttitle'] ? b[column].props['data-sorttitle']
+          : b[column].props.children
+        : b[column];
+      return bValue.localeCompare(aValue, undefined, { numeric: true });
+    });
+
+  return rowArray;
+};
+
+export const transform = (resource, key) => {
+  let value = lodash.get(resource, key.resourceKey);
+  if (key.type === 'timestamp') {
+    return moment(value).format('MMM Do YYYY \\at h:mm A');
+  } if (key.type === 'i18n') {
+    return msgs.get(key.resourceKey);
+  } if (key.type === 'boolean') {
+    value = (new Boolean(value)).toString();
+    return msgs.get(value);
+  } if (key.transformFunction && typeof key.transformFunction === 'function') {
+    return key.transformFunction(resource);
+  } if (key.type === 'tag') {
+    var data = key.getData(resource);
+    return data ? data.map((tagText, index) => <Tag key={`tag-${index}`} style={{ display: 'inline-block' }} type="beta" title={tagText.title}>{tagText.value ? `${tagText.name}:${tagText.value}` : tagText.name}</Tag>) : '-';
+  } if (key.type === 'expression') {
+    var data = key.getData(resource);
+    return data ? data.map((tagText, index) => (
+      <span className="bx--tag bx--tag--beta" title={tagText.title} style={{ display: 'inline-block' }}>
+  {tagText.name}
+<div className="expression">{tagText.operator}</div>
+  {tagText.value}
+</span>
+    )) : '-';
+  } if (key.type === 'links') {
+    var data = key.getData(resource);
+    return data ? data.map((linkInfo, index) => <a style={{ display: 'block' }} key={`link-${index}`} href={linkInfo.url} target="_blank" rel="noopener noreferrer" title={linkInfo.description}>{linkInfo.description}</a>) : '-';
+  }
+  return (value || value === 0) ? value : '-';
+};
+
+export const getLabelsToString = (labels) => {
+  const labelKeys = labels && Object.keys(labels);
+  if (labelKeys && labelKeys.length > 0) {
+    let str = '';
+    for (const key of labelKeys) {
+      str += `${key}=${labels[key]},`;
+    }
+    return str.substring(0, str.length - 1);
+  }
+  return '-';
+};
+
+const defaultTimestampKey = 'metadata.creationTimestamp';
+
+export const getAgeDifference = (createdTime) => {
+  const difference = moment().diff(createdTime);
+  const diffDuration = moment.duration(difference);
+  const days = diffDuration.days();
+  const hours = diffDuration.hours();
+  const minutes = diffDuration.minutes();
+  return {
+    difference, diffDuration, days, hours, minutes,
+  };
+};
+
+export const getCreationTime = (item, timestampKey) => {
+  const key = timestampKey || defaultTimestampKey;
+  const createdTime = lodash.get(item, key);
+  return createdTime;
+};
+
+export const getAge = (item, timestampKey) => {
+  const createdTime = getCreationTime(item, timestampKey);
+  if (createdTime) {
+    const diff = getAgeDifference(createdTime);
+    const { days } = diff;
+    const { hours } = diff;
+    const { minutes } = diff;
+
+    if (days > 0) {
+      return days === 1 ? msgs.get('dayAgo') : msgs.get('daysAgo', [days]);
+    }
+    if (hours > 0) {
+      return hours === 1 ? msgs.get('hourAgo') : msgs.get('hoursAgo', [hours]);
+    }
+    return minutes === 1 ? msgs.get('minuteAgo') : msgs.get('minutesAgo', [minutes]);
+  }
+  return '-';
+};
+
+export const openModal = (...args) => {
+  // https://github.com/carbon-design-system/carbon/issues/4036
+  // Carbon Modal a11y focus workaround
+  setTimeout(
+    () => openModal_internal(...args),
+    25, // milliseconds
+  );
+};
+
+export const openActionModal = (namespace, resourceName, apiVersion, actionName, actionDescription) => {
+  const restApi = `/kappnav/resource/${resourceName}/execute/command/${actionName}?namespace=${namespace}&apiVersion=${apiVersion}`;
+
+  const resource = {};
+  window.secondaryHeader.showActionResourceModal(true, {
+    primaryBtn: 'modal.button.submit',
+    heading: actionDescription,
+  }, resource, restApi);
+};
+
+const openModal_internal = (operation, resource, application, applicationNamespace, cmd, cmdInput) => {
+  const resourceType = resource.kind.toLowerCase();
+  if (resourceType === 'job' && operation === 'remove') {
+    // The delete job logic is very different from the other
+    window.secondaryHeader.showRemoveResourceModal(
+      true,
+      { primaryBtn: `modal.button.${operation}`, heading: `modal.${operation}.heading` },
+      resource,
+      `/kappnav/resource/command/${encodeURIComponent(resource.metadata.name)}`,
+    );
+  } else if (operation === 'edit') {
+    window.secondaryHeader.showResourceModal(true, {
+      primaryBtn: 'modal.button.save',
+      heading: `modal.${operation}.heading`,
+    }, resource, `/kappnav/${resourceType}/${encodeURIComponent(resource.metadata.name)}?namespace=${encodeURIComponent(resource.metadata.namespace)}`);
+  } else if (operation === 'action') {
+    const { apiVersion } = resource;
+    let url = `/kappnav/resource/${encodeURIComponent(resource.metadata.name)}/${resource.kind}/execute/command/${encodeURIComponent(cmd.name)
+    }?namespace=${encodeURIComponent(resource.metadata.namespace)}&apiVersion=${apiVersion}`;
+    if (application) {
+      url = `/kappnav/resource/${encodeURIComponent(application)}/${encodeURIComponent(resource.metadata.name)}/${resource.kind}/execute/command/${encodeURIComponent(cmd.name)
+      }?namespace=${encodeURIComponent(resource.metadata.namespace)}&application-namespace=${applicationNamespace}&apiVersion=${apiVersion}`;
+    }
+
+    let input;
+    if (cmdInput && cmd[CONFIG_CONSTANTS.REQUIRES_INPUT]) {
+      input = cmdInput[cmd[CONFIG_CONSTANTS.REQUIRES_INPUT]];
+    }
+
+    window.secondaryHeader.showActionResourceModal(true, {
+      primaryBtn: 'modal.button.submit',
+      heading: cmd.description,
+    }, resource, url, input, cmd);
+  } else {
+    window.secondaryHeader.showRemoveResourceModal(true, {
+      primaryBtn: `modal.button.${operation}`,
+      heading: `modal.${operation}.heading`,
+    }, resource, `/kappnav/${resourceType}/${encodeURIComponent(resource.metadata.name)}?namespace=${encodeURIComponent(resource.metadata.namespace)}`);
+  }
+};
+
+export const performUrlAction = (urlPattern, openWindow, kind, name, namespace, linkId, followLink, apiVersion) => {
+  if (urlPattern) {
+    const apiVersionQueryParam = apiVersion ? `&apiVersion=${encodeURIComponent(apiVersion)}` : '';
+
+    // expand the url
+    fetch(`/kappnav/resource/${encodeURIComponent(name)}/${kind}?action-pattern=${encodeURIComponent(urlPattern)}&namespace=${encodeURIComponent(namespace)}${apiVersionQueryParam}`)
+      .then((response) => {
+        if (!response.ok) {
+        // Failed to get a link back
+        // Todo: Decide how to display this error to the user
+        } else {
+          return response.json();
+        }
+      }).then((result) => {
+        let url = result.action;
+
+        try {
+          const parsedURL = new URL(result.action);
+          if (parsedURL && parsedURL.searchParams) {
+            const searchParams = parsedURL.searchParams.entries();
+            let newURL = parsedURL.origin + parsedURL.pathname + parsedURL.hash;
+            // URL encode search params
+            let first = true;
+            for (const [key, value] of searchParams) {
+              if (first === true) {
+                newURL += '?';
+              } else {
+                newURL += '&';
+              }
+              newURL = `${newURL + key}=${encodeURIComponent(value)}`;
+              first = false;
+            }
+            url = newURL;
+          }
+        } catch (e) {
+          // This might happen if the URL is not valid.  That's ok, we will still set it to the wrong thing so the user can
+          // remedy the problem
+        }
+
+        if (linkId) {
+          if (document.getElementById(linkId)) { // We are updating a link in place, it has not been clicked on, so don't open it
+            document.getElementById(linkId).href = url;
+            document.getElementById(linkId).removeEventListener('onclick', (e) => { e.preventDefault(); });
+          }
+        } else if (followLink) {
+          if (openWindow === 'current') {
+            window.location.href = url;
+          } else {
+            const newWindow = window.open();
+            newWindow.opener = null;
+            newWindow.location = url;
+            if (openWindow === 'new') {
+              newWindow.toolbar = 0;
+              newWindow.location = 0;
+              newWindow.menubar = 0;
+            }
+          }
+        }
+      });
+  }
+};
+
+export const updateSecondaryHeader = (statusColor, statusText, actions) => {
+  window.secondaryHeader.update(statusColor, statusText, actions);
+};
+
+export const getHoverOverTextForStatus = (annotations) => {
+  if (!annotations) {
+    return '';
+  }
+  const hoverOverNLS = annotations['kappnav.status.flyover.nls'];
+  if (hoverOverNLS) {
+    const flyover = JSON.parse(hoverOverNLS);
+    if (!Array.isArray(flyover)) {
+      // Expect this to be a string like "unknown"
+      return msgs.get(flyover.toLowerCase());
+    }
+
+    // splice will return index 0 and delete the element from the array
+    // details array should be left with only arguments for the PII message e.g. {0} {1} ...
+    const indexToRemove = 0;
+    const howManyToRemoveFromArray = 1;
+    const msgKey = flyover.splice(indexToRemove, howManyToRemoveFromArray);
+    return msgs.get(msgKey, flyover);
+  }
+  const hoverOver_notNLS = annotations['kappnav.status.flyover'];
+  if (hoverOver_notNLS) {
+    return hoverOver_notNLS;
+  }
+  return '';
+};
+
+export const getStatus = (metadata, appNavConfigData) => {
+  const statusColorMapping = appNavConfigData && appNavConfigData.statuColorMapping;
+  const statusPrecedence = appNavConfigData && appNavConfigData.statusPrecedence ? appNavConfigData && appNavConfigData.statusPrecedence : [];
+  const statusUnknown = appNavConfigData && appNavConfigData.statusUnknown;
+
+  const annotations = metadata && metadata.annotations;
+
+  let statusMessage = statusUnknown || '';
+  statusMessage = getHoverOverTextForStatus(annotations);
+
+  let statusColor = STATUS_COLORS.DEFAULT_COLOR;
+  let statusText = '';
+  let sortTitle = '';
+
+  const name = metadata && metadata.name;
+  const value = annotations && annotations['kappnav.status.value'] ? annotations['kappnav.status.value'] : statusUnknown;
+  const sortIndex = statusPrecedence.findIndex((val) => val === value);
+
+  if (statusColorMapping && value) {
+    statusText = msgs.get(value.toLowerCase());
+    const colorKey = statusColorMapping.values && statusColorMapping.values[value];
+    if (colorKey) {
+      const color = statusColorMapping.colors && statusColorMapping.colors[colorKey];
+      if (color) {
+        statusColor = color;
+      }
+    }
+    sortTitle = sortIndex + statusColor + name;
+  }
+
+  return {
+    statusColor,
+    borderColor: STATUS_COLORS.BORDER_COLOR,
+    statusMessage,
+    statusText,
+    sortTitle,
+  };
+};
+
+export const buildStatusHtml = (statusObj) => (
+  <div className="statusCell" data-sorttitle={statusObj.sortTitle}>
+    <span
+      className="bx--detail-page-header-status-icon"
+      title={statusObj.statusMessage}
+      style={{ backgroundColor: statusObj.statusColor, borderColor: statusObj.borderColor }}
+    />
+    <span className="bx--detail-page-header-status-text">{statusObj.statusText}</span>
+  </div>
+);
+
+export const validateUrl = (url) => {
+  // Parse the user provided URL.  This is crude way to prevent XSS by
+  // sanity checking the user's input is actually a URL
+
+  const result = { href: '', text: '' };
+  try {
+    if (url && url.trim()) { // check for empty or non-existing string
+      const temp = new URL(url);
+      result.href = temp.href;
+      result.text = temp.href;
+    }
+  } catch (err) {
+    // If URL cannot parse the string, that must mean the user input
+    // is not in a URL format.  Let's be on the safeside and not display
+    // the user's input (XSS) and display a reason why the URL is not shown
+    result.text = msgs.get('description.title.urlError');
+  }
+  return result;
+};
+
+/**
+ * Determine if an action is enabled for a resource
+ * @param {*} resourceLabels - a resource's labels
+ * @param {*} resourceAnnotations - a resource's annotations
+ * @param {*} action - an action's data
+ *
+ * Rule:  if action specifies enablement-label or enablement-annotation AND resource specifies matching
+ *        label or annotation, then action is enabled else action is enabled
+ */
+function isActionEnabled(resourceLabels, resourceAnnotations, action) {
+  const enablementLabel = action[CONFIG_CONSTANTS.ENABLEMENT_LABEL];
+  const enablementAnnotation = action[CONFIG_CONSTANTS.ENABLEMENT_ANNOTATION];
+
+  if (!enablementLabel && !enablementAnnotation) {
+    // If both enablement-label and enablement-annotation are missing, assume the action is enabled for the resource
+    return true;
+  }
+
+  let isEnabled = resourceLabels[enablementLabel];
+  if (isEnabled) {
+    // The action's enablement-label has value X and
+    // the resource has a label of X.  This means the
+    // action is enabled for this particular resource
+    return true;
+  }
+
+  isEnabled = resourceAnnotations[enablementAnnotation];
+  if (isEnabled) {
+    // The action's enablement-annotation has value X and
+    // the resource has a annotation of X.  This means the
+    // action is enabled for this particular resource
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Return a list containing only enabled actions for a resource
+ * @param {*} resourceLabels - an object of a resource's labels
+ * @param {*} actions - list of actions for the resource
+ */
+function removeDisabledActions(resourceLabels, resourceAnnotations, actions) {
+  // Loop from end to beginning to ensure each element is processed
+  // even if elements are being removed in the loop
+  for (let index = actions.length - 1; index >= 0; index--) {
+    // Remove any disabled command actions
+    const one_action = actions[index];
+    const isDisabled = !isActionEnabled(resourceLabels, resourceAnnotations, one_action);
+    if (isDisabled) {
+      actions.splice(index, 1);
+    }
+  }
+  return actions;
+}
+
+export const getOverflowMenu = (componentData, actionMap, staticResourceData, applicationName, applicationNamespace) => {
+  const cloneData = lodash.cloneDeep(componentData);
+  const itemId = cloneData.metadata.uid;
+  const resourceLabels = cloneData.metadata.labels;
+  const resourceAnnotations = cloneData.metadata.annotations;
+  const { apiVersion } = cloneData;
+
+
+  // remove fields that should not show up on an editor
+  delete cloneData.metadata.creationTimestamp;
+  delete cloneData.metadata.selfLink;
+  delete cloneData.metadata.uid;
+
+  // ***************
+  // Static Actions
+
+  const hasStaticActions = staticResourceData && staticResourceData.actions && staticResourceData.actions.length > 0;
+  let staticActions = [];
+  if (hasStaticActions) {
+    staticActions = staticResourceData.actions.map((action, staticindex) => (
+      <OverflowMenuItem
+        key={itemId + action}
+        primaryFocus={staticindex === 0}
+        itemText={msgs.get(`table.actions.${action}`)}
+        onClick={openModal.bind(this, action, cloneData)}
+        onFocus={(e) => { e.target.title = msgs.get(`table.actions.${action}`); }}
+        onMouseEnter={(e) => { e.target.title = msgs.get(`table.actions.${action}`); }}
+      />
+    ));
+  }
+
+  // ***************
+  // Custom Actions
+  const hasCustomActions = staticResourceData && staticResourceData.customActions && staticResourceData.customActions.length > 0;
+  let customActions = [];
+  if (hasCustomActions) {
+    customActions = staticResourceData.customActions.map((customAction, staticindex) => {
+      if (customAction.show(componentData, actionMap, staticResourceData, applicationName, applicationNamespace)) {
+        const kind = componentData && componentData.kind;
+        const namespace = componentData && componentData.metadata && componentData.metadata.namespace;
+        const name = componentData && componentData.metadata && componentData.metadata.name;
+        const componentBodyToRemove = [{
+          app: name,
+          namespace,
+          kind,
+        }];
+        return customAction.getCustomAction(staticindex, itemId, applicationName, applicationNamespace, componentBodyToRemove);
+      }
+    });
+  }
+
+  // ***************
+  // URL Actions
+
+  let urlActions = actionMap && actionMap[CONFIG_CONSTANTS.URL_ACTIONS];
+  urlActions = urlActions && urlActions.filter((action) => !action[CONFIG_CONSTANTS.MENU_ITEM] || action[CONFIG_CONSTANTS.MENU_ITEM] != 'false');
+  const hasUrlActions = urlActions && urlActions.length && urlActions.length > 0;
+  if (hasUrlActions) {
+    urlActions = removeDisabledActions(resourceLabels, resourceAnnotations, urlActions);
+
+    urlActions.forEach((action) => { // try to cache the links ahead of time
+      const kind = componentData && componentData.kind;
+      const namespace = componentData && componentData.metadata && componentData.metadata.namespace;
+      const name = componentData && componentData.metadata && componentData.metadata.name;
+      performUrlAction(action['url-pattern'], action['open-window'], kind, name, namespace, undefined, false, apiVersion);
+    });
+
+    urlActions = urlActions.map((action, urlindex) => {
+      const actionLabel = action['text.nls'] ? msgs.get(action['text.nls']) : action.text;
+      const actionDesc = action['description.nls'] ? msgs.get(action['description.nls']) : action.description;
+      const { apiVersion } = componentData;
+      return (
+        <OverflowMenuItem
+          key={action.name}
+          primaryFocus={urlindex === 0 && !hasStaticActions}
+          itemText={actionLabel}
+          onClick={performUrlAction.bind(this, action['url-pattern'], action['open-window'], componentData && componentData.kind, componentData && componentData.metadata && componentData.metadata.name, componentData && componentData.metadata && componentData.metadata.namespace, undefined, true, apiVersion)}
+          onFocus={(e) => {
+            if (actionDesc) { e.target.title = actionDesc; }
+          }}
+          onMouseEnter={(e) => {
+            if (actionDesc) { e.target.title = actionDesc; }
+          }}
+        />
+      );
+    });
+  }
+
+  // ***************
+  // Command Actions
+
+  let cmdActions = actionMap && actionMap[CONFIG_CONSTANTS.CMD_ACTIONS];
+  const cmdInputs = actionMap && actionMap[CONFIG_CONSTANTS.INPUTS];
+  const hasCmdActions = cmdActions && cmdActions.length && cmdActions.length > 0;
+  if (hasCmdActions) {
+    cmdActions = removeDisabledActions(resourceLabels, resourceAnnotations, cmdActions);
+
+    cmdActions = cmdActions.map((action, cmdindex) => {
+      const actionLabel = action['text.nls'] ? msgs.get(action['text.nls']) : action.text;
+      const actionDesc = action['description.nls'] ? msgs.get(action['description.nls']) : action.description;
+      return (
+        <OverflowMenuItem
+          key={action.name}
+          primaryFocus={cmdindex === 0 && !hasUrlActions && !hasStaticActions}
+          itemText={actionLabel}
+          onClick={openModal.bind(this, 'action', cloneData, applicationName, applicationNamespace, action, cmdInputs)}
+          onFocus={(e) => {
+            if (actionDesc) { e.target.title = actionDesc; }
+          }}
+          onMouseEnter={(e) => {
+            if (actionDesc) { e.target.title = actionDesc; }
+          }}
+        />
+      );
+    });
+  }
+
+  // The arrays need to be .concat() in a specific order: static, url, cmd
+  let allEnabledActions = staticActions.concat(customActions).concat(urlActions).concat(cmdActions);
+  // Use filter to remove undefined/null lists that were added by .concat()
+  allEnabledActions = allEnabledActions.filter((n) => n);
+  if (allEnabledActions.length > 0) {
+    const menu = (
+      <OverflowMenu floatingMenu flipped iconDescription={msgs.get('svg.description.overflowMenu')}>
+        {allEnabledActions}
+      </OverflowMenu>
+    );
+    return menu;
+  }
+};
+
+export const parseJSON = (response) => new Promise((resolve) => response.json()
+  .then((json) => resolve({
+    status: response.status,
+    ok: response.ok,
+    json,
+  })));
+
+// Function that validates a name field
+export const isInvalid = (field) => {
+  // per the kubernetes documentation a name must:
+  // - start and end with lowercase alphanumeric characters
+  // - can only contain lowercase alphanumeric characters, -, or .
+  // - must be less than 253 characters
+
+  // get primary modal button(ex: 'Add' button) to disable it if there are errors due to invalid characters
+  let primaryButton;
+  if (document.getElementById('modal-buttons')) { // only defined once the modal is rendered
+    primaryButton = document.getElementById('modal-buttons').children[1]; // 'modal-buttons' is the ModalFooter element that contains the modal buttons - children[1] is the primary button
+    if (primaryButton) {
+      if ((field.startsWith('-') || field.startsWith('.') || field.endsWith('-') || field.endsWith('.')) || !(field.match('^[a-z0-9-.]*$')) || (field.length > 253)) {
+        primaryButton.disabled = true; // don't allow user to submit action if the field is invalid
+        return true;
+      }
+      primaryButton.disabled = false;
+      return false;
+    }
+  }
+  return false; // will only reach this when modal hasn't rendered yet
+};
+
+// Helper function to validate the consoleurl
+function invalidURL(consoleurl) {
+  const pattern = new RegExp(/^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/);
+  if (pattern.test(consoleurl)) {
+    return false;
+  }
+  return true;
+}
+
+// Function that validates a consoleURL field
+export const isInvalidConsoleURL = (field) => {
+  // using Regex to validate the URL
+  // get primary modal button(ex: 'Add' button) to disable it if there are errors due to invalid URL
+  let primaryButton;
+  if (document.getElementById('modal-buttons')) { // only defined once the modal is rendered
+    primaryButton = document.getElementById('modal-buttons').children[1]; // 'modal-buttons' is the ModalFooter element that contains the modal buttons - children[1] is the primary button
+    if (primaryButton) {
+      if (invalidURL(field)) {
+        primaryButton.disabled = true; // don't allow user to submit action if the URL is invalid
+        return true;
+      }
+      primaryButton.disabled = false;
+      return false;
+    }
+  }
+  return false; // will only reach this when modal hasn't rendered yet
+};
+
+// Function that returns an error message based on the reason why the name field is invalid
+export const getInvalidMsg = (field) => {
+  if (field.startsWith('-') || field.startsWith('.') || field.endsWith('-') || field.endsWith('.')) { // name starts with '-' or '.', which are allowed, but not at beginning or end
+    return msgs.get('error.invalid.field.start.end');
+  }
+
+  if (!field.match('^[a-z0-9-.]*$')) { // name contains something other than an lowercase alphanumeric characters, -, or .
+    return msgs.get('error.invalid.field.characters');
+  }
+
+  if (field.length > 253) { // name is too long
+    return msgs.get('error.invalid.field.length');
+  }
+};

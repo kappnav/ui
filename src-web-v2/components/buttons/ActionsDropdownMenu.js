@@ -5,50 +5,93 @@ import {
   OverflowMenuItem,
 } from 'carbon-components-react';
 
+
 import _ from 'lodash';
+import msgs from '../../../nls/kappnav.properties';
 
 const ActionsDropdownMenu = (props) => {
-  const { listOfActions } = props;
+  const { cmdActions, urlActions } = props;
 
-  if (!listOfActions) {
-    // Since listOfActions is optional, check it
+  if (cmdActions.length + urlActions.length === 0) {
+    // No need for a dropdown menu
     return <></>;
   }
 
   // Avoid mutating original parameters
-  const list = _.cloneDeep(listOfActions);
+  const cmdList = _.cloneDeep(cmdActions);
+  const urlList = _.cloneDeep(urlActions);
 
-  let listOfMenuItems = [];
+  let urlMenuItems = [];
   // Transform list of actions into functional <OverflowMenuItems>
-  listOfMenuItems = list.map((itemProps, index) => {
+  urlMenuItems = urlList.map((itemProps, index) => {
+    const {
+      text,
+      'text.nls': textNLS,
+      description,
+      'description.nls': descriptionNLS,
+      name
+    } = itemProps;
     const primaryFocus = index === 0;
-    return <OverflowMenuItem {...itemProps} primaryFocus={primaryFocus} />;
+    return (
+      <OverflowMenuItem
+        key={name}
+        itemText={textNLS ? msgs.get(textNLS) : text}
+        onClick={() => false} // FIXME: Implement me
+        onFocus={(e) => {
+          e.target.title = descriptionNLS ? msgs.get(descriptionNLS) : description;
+        }}
+        onMouseEnter={(e) => {
+          e.target.title = descriptionNLS ? msgs.get(descriptionNLS) : description;
+        }}
+        primaryFocus={primaryFocus}
+      />
+    );
+  });
+
+  let cmdMenuItems = [];
+  // Transform list of actions into functional <OverflowMenuItems>
+  cmdMenuItems = cmdList.map((itemProps, index) => {
+    const primaryFocus = index === 0;
+    const {
+      text,
+      'text.nls': textNLS,
+      description,
+      'description.nls': descriptionNLS,
+      name,
+    } = itemProps;
+    return (
+      <OverflowMenuItem
+        key={name}
+        primaryFocus={primaryFocus}
+        itemText={textNLS ? msgs.get(textNLS) : text}
+        onClick={() => false} // FIXME: Implement me
+        onFocus={(e) => {
+          e.target.title = descriptionNLS ? msgs.get(descriptionNLS) : description;
+        }}
+        onMouseEnter={(e) => {
+          e.target.title = descriptionNLS ? msgs.get(descriptionNLS) : description;
+        }}
+      />
+    );
   });
 
   return (
+    // FIXME: This needs to be replaced by the logic common.js
     <OverflowMenu className="kv--overflow-menu" flipped>
-      {listOfMenuItems}
+      {urlMenuItems}
+      {cmdMenuItems}
     </OverflowMenu>
   );
 };
 
-{ /* <OverflowMenuItem key={itemId + action}
-primaryFocus={staticindex === 0}
-itemText={msgs.get('table.actions.'+action)}
-onClick={openModal.bind(this, action, cloneData)}
-onFocus={(e) => {e.target.title = msgs.get('table.actions.'+action)}}
-onMouseEnter={(e) => {e.target.title = msgs.get('table.actions.'+action)}} />
-)) */ }
-
 ActionsDropdownMenu.propTypes = {
-  listOfActions: PropTypes.arrayOf(PropTypes.shape({
-    onClick: PropTypes.func.isRequired,
-    itemText: PropTypes.string.isRequired, // This has to be translated
-  })),
+  cmdActions: PropTypes.arrayOf(PropTypes.object), // TODO: Expand object to key/value
+  urlActions: PropTypes.arrayOf(PropTypes.object), // TODO: Expand object to key/value
 };
 
 ActionsDropdownMenu.defaultProps = {
-  listOfActions: undefined,
+  cmdActions: [],
+  urlActions: [],
 };
 
 export default ActionsDropdownMenu;

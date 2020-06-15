@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import {
   DataTable,
-  ModalWrapper,
   Button,
 } from 'carbon-components-react';
 
@@ -21,6 +21,7 @@ import {
 } from '..';
 
 import msgs from '../../../nls/kappnav.properties';
+import ActionsButtons from '../buttons/ActionsButtons';
 
 require('./ResourceTable.scss');
 
@@ -37,8 +38,27 @@ const {
   TableToolbarContent,
   TableExpandHeader,
   TableExpandRow,
-  TableExpandedRow,
+  TableExpandedRow, // TODO: Maybe for the first element on the list?
 } = DataTable;
+
+/**
+ * returns list of React components (ie. <MyComponent />).
+ */
+const getActions = (list) => {
+  const cloneList = _.cloneDeep(list);
+  const {
+    'cmd-actions': cmdActions,
+    'url-actions': urlActions,
+    deletable,
+    editable,
+  } = cloneList;
+
+  const data = {
+    cmdActions, urlActions, deletable, editable,
+  };
+
+  return <ActionsButtons {...data} />;
+};
 
 const ResourceTable = (props) => {
   const {
@@ -46,8 +66,25 @@ const ResourceTable = (props) => {
     buttonText,
     getStatusIcon,
     tableHeaders,
-    actionButtons,
   } = props;
+
+  const renderCell = (cell) => {
+    let cellContent;
+    if (cell.info.header === 'action') {
+      cellContent = <ActionsButtons {...cell.value} />;
+    } else if (cell.info.header === 'status') {
+      cellContent = getStatusIcon(cell.value);
+    } else if (cell.info.header === 'name') {
+      cellContent = <Link to={`applications/${cell.value}`}>{cell.value}</Link>;
+    } else {
+      cellContent = cell.value;
+    }
+    return (
+      <TableCell key={cell.id}>
+        {cellContent}
+      </TableCell>
+    );
+  };
 
   return (
     <DataTable
@@ -94,19 +131,7 @@ const ResourceTable = (props) => {
               {rows.map((row) => (
                 <React.Fragment key={row.id}>
                   <TableExpandRow {...getRowProps({ row })}>
-                    {row.cells.map((cell) => (
-                      <TableCell key={cell.id}>
-                        {/* FIXME: Find a better way to avoid unnecessary calls
-                        to getStatusIcon for every cell */}
-                        {getStatusIcon(cell.value)}
-                        {cell.info.header === 'action' && actionButtons }
-                        {/* FIXME: This logic is ugly.  We are relying on the else
-                        clause to display the cell's text */}
-                        {cell.info.header === 'name'
-                          ? <Link to={`applications/${cell.value}`}>{cell.value}</Link>
-                          : cell.value}
-                      </TableCell>
-                    ))}
+                    {row.cells.map((cell) => renderCell(cell))}
                   </TableExpandRow>
                 </React.Fragment>
               ))}
@@ -129,8 +154,6 @@ ResourceTable.propTypes = {
     header: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
   })).isRequired,
-  // A React element (ie. <MyComponent />).
-  actionButtons: PropTypes.element.isRequired,
 };
 
 export default ResourceTable;

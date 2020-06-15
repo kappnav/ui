@@ -17,8 +17,14 @@ function formatApplicationData(array) {
     name: item.application?.metadata?.name,
     status: item.application?.metadata?.annotations?.['kappnav.status.value'],
     namespace: item.application?.metadata?.namespace,
-    'url-actions': item?.['action-map']?.['url-actions'],
-    'cmd-actions': item?.['action-map']?.['cmd-actions'],
+    labels: item.application?.metadata?.labels,
+    annotations: item.application?.metadata?.annotations,
+    action: {
+      urlActions: item?.['action-map']?.['url-actions'] || [],
+      cmdActions: item?.['action-map']?.['cmd-actions'] || [],
+      deletable: true, // default action for all
+      editable: false,
+    },
   }));
   return tableRows;
 }

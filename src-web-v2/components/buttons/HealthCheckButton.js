@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  ModalWrapper,
+  ModalWrapper, // FIXME: Do not use this, change it to <Modal>
 } from 'carbon-components-react';
 
 import {
