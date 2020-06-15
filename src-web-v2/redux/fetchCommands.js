@@ -12,8 +12,8 @@ function fetchCommands() {
         return res.json();
       })
       .then((res) => {
-        dispatch(fetchCommandsSuccess(res.commands));
-        return res.commands;
+        dispatch(fetchCommandsSuccess(res));
+        return res;
       })
       .catch((error) => {
         dispatch(fetchCommandsError(error));

@@ -62,29 +62,11 @@ const getActions = (list) => {
 
 const ResourceTable = (props) => {
   const {
+    renderCellContent,
     listOfResources,
     buttonText,
-    getStatusIcon,
     tableHeaders,
   } = props;
-
-  const renderCell = (cell) => {
-    let cellContent;
-    if (cell.info.header === 'action') {
-      cellContent = <ActionsButtons {...cell.value} />;
-    } else if (cell.info.header === 'status') {
-      cellContent = getStatusIcon(cell.value);
-    } else if (cell.info.header === 'name') {
-      cellContent = <Link to={`applications/${cell.value}`}>{cell.value}</Link>;
-    } else {
-      cellContent = cell.value;
-    }
-    return (
-      <TableCell key={cell.id}>
-        {cellContent}
-      </TableCell>
-    );
-  };
 
   return (
     <DataTable
@@ -131,7 +113,14 @@ const ResourceTable = (props) => {
               {rows.map((row) => (
                 <React.Fragment key={row.id}>
                   <TableExpandRow {...getRowProps({ row })}>
-                    {row.cells.map((cell) => renderCell(cell))}
+                    {row.cells.map((cell) => {
+                      const cellContent = renderCellContent(cell);
+                      return (
+                        <TableCell key={cell.id}>
+                          {cellContent || cell.value}
+                        </TableCell>
+                      );
+                    })}
                   </TableExpandRow>
                 </React.Fragment>
               ))}
@@ -145,15 +134,20 @@ const ResourceTable = (props) => {
 };
 
 ResourceTable.propTypes = {
+  // Allow for custom rendering of cells if the default plaintext cell content
+  // is undesirable.
+  renderCellContent: PropTypes.func,
   listOfResources: PropTypes.arrayOf(PropTypes.object).isRequired,
   buttonText: PropTypes.string.isRequired,
-  // This is a function that will get the icon corresponding to the resource's status
-  getStatusIcon: PropTypes.func.isRequired,
   // Headers for the Carbon `<DataTable>`
   tableHeaders: PropTypes.arrayOf(PropTypes.shape({
     header: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
   })).isRequired,
+};
+
+ResourceTable.defaultProps = {
+  renderCellContent: (cell) => cell.value,
 };
 
 export default ResourceTable;

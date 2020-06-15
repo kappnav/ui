@@ -73,7 +73,6 @@ const ActionsButtons = (props) => {
           </p>
         </Modal>
       }
-      {/* FIXME: Pass in list */}
       <ActionsDropdownMenu urlActions={urlActions} cmdActions={cmdActions} />
     </span>
   );

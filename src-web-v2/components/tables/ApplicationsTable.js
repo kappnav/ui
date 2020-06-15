@@ -1,5 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import _ from 'lodash';
 import {
   Loading,
@@ -15,7 +17,6 @@ import ResourceTable from './ResourceTable';
 import { ActionsButtons } from '..';
 import { useInterval } from '../../hooks';
 import fetchApplications from '../../redux/fetchApplications';
-
 
 import msgs from '../../../nls/kappnav.properties';
 
@@ -47,6 +48,18 @@ const getStatusIcon = (status) => (
   </>
 );
 
+const renderCellContent = (cell) => {
+  let cellContent;
+  if (cell.info.header === 'action') {
+    cellContent = <ActionsButtons {...cell.value} />;
+  } else if (cell.info.header === 'status') {
+    cellContent = getStatusIcon(cell.value);
+  } else if (cell.info.header === 'name') {
+    cellContent = <Link to={`applications/${cell.value}`}>{cell.value}</Link>;
+  }
+  return cellContent;
+};
+
 const ApplicationResourceTable = () => {
   const dispatch = useDispatch(); // Hook gets redux dispatch method
 
@@ -67,6 +80,7 @@ const ApplicationResourceTable = () => {
 
   return (
     <ResourceTable
+      renderCellContent={renderCellContent}
       tableHeaders={tableHeaders}
       getStatusIcon={getStatusIcon}
       listOfResources={applications}

@@ -71,14 +71,34 @@ const getStatus = (job) => {
 };
 
 // Format the data to fit the needs of Carbon.
-const formatCommmandData = (array) => {
-  const tableRows = array.map((item) => ({
-    id: item?.metadata?.uid,
-    name: item?.metadata?.annotations?.['kappnav-job-action-text'],
-    status: getStatus(item).status, // FIXME: Needs PII
-    namespace: item?.metadata?.namespace,
-    deletable: true, // default action for all
-  }));
+const formatCommmandData = ({ 'action-map': actions, commands }) => {
+  const tableRows = commands.map((item) => {
+    const labels = item?.metadata?.labels;
+
+    // eslint-disable-next-line prefer-template
+    const component = labels?.['kappnav-job-component-namespace']
+      + '/' + labels?.['kappnav-job-component-name'];
+
+    // eslint-disable-next-line prefer-template
+    const applicationName = labels?.['kappnav-job-application-namespace']
+      + '/' + labels?.['kappnav-job-application-name'];
+
+    return {
+      applicationName,
+      id: item?.metadata?.uid,
+      actionName: item?.metadata?.annotations?.['kappnav-job-action-text'],
+      component,
+      status: getStatus(item).status, // FIXME: Needs PII
+      namespace: item?.metadata?.namespace,
+      deletable: true, // default action for all
+      action: {
+        urlActions: actions?.['url-actions'] || [],
+        cmdActions: actions?.['cmd-actions'] || [],
+        deletable: true, // default action for all
+        editable: false,
+      },
+    };
+  });
   return tableRows;
 };
 
@@ -91,8 +111,8 @@ const commandsReducer = (state = initialState, action) => {
       };
     case FETCH_COMMANDS_SUCCESS: {
       // Avoid any modification to the original arguments, per Redux guidelines
-      const commands = _.cloneDeep(action.payload);
-      const formattedData = formatCommmandData(commands);
+      const payload = _.cloneDeep(action.payload);
+      const formattedData = formatCommmandData(payload);
       return {
         ...state,
         pending: false,

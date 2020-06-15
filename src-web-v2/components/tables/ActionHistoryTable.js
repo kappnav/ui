@@ -26,12 +26,16 @@ const tableHeaders = [
     key: 'actionName',
   },
   {
+    header: 'Application Name',
+    key: 'applicationName',
+  },
+  {
     header: 'Component',
     key: 'component',
   },
   {
-    header: msgs.get('message'),
-    key: 'message',
+    header: 'Age',
+    key: 'age',
   },
   {
     header: 'Action',
@@ -45,6 +49,7 @@ const getStatusIcon = (status) => (
     { status === 'Failed' && <ErrorFilled20 className="kv--problem-icon" /> }
     { status === 'Unknown' && <Unknown20 className="kv--unknown-icon" /> }
     { status === 'In Progress' && <Fade20 className="kv--inprogress-icon" /> }
+    { status }
   </>
 );
 
@@ -66,9 +71,23 @@ const ActionHistoryResourceTable = () => {
     return <Loading withOverlay />;
   }
 
+  const renderCellContent = (cell) => {
+    let cellContent;
+    if (cell.info.header === 'action') {
+      cellContent = <ActionsButtons {...cell.value} />;
+    } else if (cell.info.header === 'status') {
+      cellContent = getStatusIcon(cell.value);
+    } else if (cell.info.header === 'actionName') {
+      cellContent = cell.value; // TODO: Replace this with an OCP url
+    } else if (cell.info.header === 'applicationName') {
+      cellContent = cell.value; // TODO: Replace this with an OCP url
+    }
+    return cellContent;
+  };
+
   return (
     <ResourceTable
-      actionButtons={<ActionsButtons />}
+      renderCellContent={renderCellContent}
       tableHeaders={tableHeaders}
       getStatusIcon={getStatusIcon}
       listOfResources={commands}
