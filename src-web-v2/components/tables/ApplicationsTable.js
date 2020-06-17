@@ -75,7 +75,7 @@ const ApplicationResourceTable = () => {
   if (loading && _.isEmpty(applications)) {
     // Only show loading when there is no applications and
     // the API is fetching data
-    return <Loading withOverlay />;
+    return <ResourceTable loading />;
   }
 
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import {
   Button,
@@ -17,9 +17,12 @@ import {
   ActionsButtons,
   SecondaryHeader,
   DropdownMenu,
+  SecondaryLeftNavMenu,
 } from '../components';
 
 import msgs from '../../nls/kappnav.properties';
+
+require('./SingleResource.scss');
 
 const {
   TableContainer,
@@ -79,80 +82,82 @@ const SingleResource = () => {
   const params = useParams();
 
   return (
-    <DataTable
-      headers={defaultHeaders}
-      rows={initialRows}
-      render={({
-        rows,
-        headers,
-        getHeaderProps,
-        getRowProps,
-        getTableProps,
-        onInputChange,
-      }) => (
-        <>
-          <SecondaryHeader title={params.appName} rightButton={<DropdownMenu />} />
+    <>
+      <SecondaryHeader title={params.appName} rightButton={<DropdownMenu />} />
+      <SecondaryLeftNavMenu />
+      <DataTable
+        headers={defaultHeaders}
+        rows={initialRows}
+        render={({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          onInputChange,
+        }) => (
+          <>
+            <TableContainer title={msgs.get('page.componentView.title')}>
 
-          <TableContainer title={msgs.get('page.componentView.title')}>
+              <TableToolbar>
+                <TableToolbarContent>
+                  <TableToolbarSearch onChange={onInputChange} />
+                  <Button
+                    onClick={() => console.log('Clicking')}
+                    size="small"
+                    kind="primary"
+                    renderIcon={Add20}
+                    iconDescription={msgs.get('add.component')}
+                  >
+                    {msgs.get('add.component')}
+                  </Button>
+                </TableToolbarContent>
+              </TableToolbar>
 
-            <TableToolbar>
-              <TableToolbarContent>
-                <TableToolbarSearch onChange={onInputChange} />
-                <Button
-                  onClick={() => console.log('Clicking')}
-                  size="small"
-                  kind="primary"
-                  renderIcon={Add20}
-                  iconDescription={msgs.get('add.component')}
-                >
-                  {msgs.get('add.component')}
-                </Button>
-              </TableToolbarContent>
-            </TableToolbar>
+              <Table {...getTableProps()}>
 
-            <Table {...getTableProps()}>
+                <TableHead>
+                  <TableRow>
+                    {/* add the expand header before all other headers */}
+                    <TableExpandHeader />
+                    {headers.map((header) => (
+                      <TableHeader {...getHeaderProps({ header, isSortable: header.key !== 'action' })}>
+                        {msgs.get(`table.header.${header.key}`)}
+                      </TableHeader>
+                    ))}
+                  </TableRow>
+                </TableHead>
 
-              <TableHead>
-                <TableRow>
-                  {/* add the expand header before all other headers */}
-                  <TableExpandHeader />
-                  {headers.map((header) => (
-                    <TableHeader {...getHeaderProps({ header, isSortable: header.key !== 'action' })}>
-                      {msgs.get(`table.header.${header.key}`)}
-                    </TableHeader>
+                <TableBody>
+                  {rows.map((row) => (
+                    <React.Fragment key={row.id}>
+                      <TableExpandRow {...getRowProps({ row })}>
+                        {row.cells.map((cell) => (
+                          <TableCell key={cell.id}>
+                            <span>
+                              {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
+                              {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
+                              {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
+                            </span>
+                          </TableCell>
+                        ))}
+                      </TableExpandRow>
+                      {row.isExpanded && (
+                        <TableExpandedRow colSpan={headers.length + 1}>
+                          <h1>Expandable row content</h1>
+                          <p>Description here</p>
+                        </TableExpandedRow>
+                      )}
+                    </React.Fragment>
                   ))}
-                </TableRow>
-              </TableHead>
+                </TableBody>
 
-              <TableBody>
-                {rows.map((row) => (
-                  <React.Fragment key={row.id}>
-                    <TableExpandRow {...getRowProps({ row })}>
-                      {row.cells.map((cell) => (
-                        <TableCell key={cell.id}>
-                          <span>
-                            {cell.value === 'Normal' && <CheckmarkOutline20 className="kv--normal-icon" /> }
-                            {cell.value === 'Warning' && <WarningAltInvertedFilled20 className="kv--warning-icon" /> }
-                            {cell.info.header === 'action' ? <ActionsButtons /> : cell.value}
-                          </span>
-                        </TableCell>
-                      ))}
-                    </TableExpandRow>
-                    {row.isExpanded && (
-                      <TableExpandedRow colSpan={headers.length + 1}>
-                        <h1>Expandable row content</h1>
-                        <p>Description here</p>
-                      </TableExpandedRow>
-                    )}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-
-            </Table>
-          </TableContainer>
-        </>
-      )}
-    />
+              </Table>
+            </TableContainer>
+          </>
+        )}
+      />
+    </>
   );
 };
 

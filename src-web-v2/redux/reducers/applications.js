@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
   FETCH_APPLICATIONS_PENDING, FETCH_APPLICATIONS_SUCCESS, FETCH_APPLICATIONS_ERROR,
+  FETCH_SINGLE_APP_PENDING, FETCH_SINGLE_APP_SUCCESS, FETCH_SINGLE_APP_ERROR,
   DELETE_APPLICATIONS_PENDING, DELETE_APPLICATIONS_SUCCESS, DELETE_APPLICATIONS_ERROR,
 } from '../actions';
 
@@ -47,6 +48,27 @@ const applicationsReducer = (state = initialState, action) => {
       };
     }
     case FETCH_APPLICATIONS_ERROR:
+      return {
+        ...state, // do this to avoid mutating original state
+        pending: false,
+        error: action.error,
+      };
+    case FETCH_SINGLE_APP_PENDING:
+      return {
+        ...state, // do this to avoid mutating original state
+        pending: true,
+      };
+    case FETCH_SINGLE_APP_SUCCESS: {
+      // Avoid any modification to the original arguments, per Redux guidelines
+      const application = _.cloneDeep(action.payload);
+      const formattedData = formatApplicationData(application);
+      return {
+        ...state, // do this to avoid mutating original state
+        pending: false,
+        data: formattedData, // FIXME: We need to change this to update a single app info in the applicationS redux space
+      };
+    }
+    case FETCH_SINGLE_APP_ERROR:
       return {
         ...state, // do this to avoid mutating original state
         pending: false,

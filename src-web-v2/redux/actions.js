@@ -5,6 +5,10 @@ export const FETCH_APPLICATIONS_PENDING = 'FETCH_APPLICATIONS_PENDING';
 export const FETCH_APPLICATIONS_SUCCESS = 'FETCH_APPLICATIONS_SUCCESS';
 export const FETCH_APPLICATIONS_ERROR = 'FETCH_APPLICATIONS_ERROR';
 
+export const FETCH_SINGLE_APP_PENDING = 'FETCH_SINGLE_APP_PENDING';
+export const FETCH_SINGLE_APP_SUCCESS = 'FETCH_SINGLE_APP_SUCCESS';
+export const FETCH_SINGLE_APP_ERROR = 'FETCH_SINGLE_APP_ERROR';
+
 export const DELETE_APPLICATIONS_PENDING = 'DELETE_APPLICATIONS_PENDING';
 export const DELETE_APPLICATIONS_SUCCESS = 'DELETE_APPLICATIONS_SUCCESS';
 export const DELETE_APPLICATIONS_ERROR = 'DELETE_APPLICATIONS_ERROR';
@@ -35,6 +39,26 @@ export const fetchApplicationsSuccess = (applications) => (
 export const fetchApplicationsError = (error) => (
   {
     type: FETCH_APPLICATIONS_ERROR,
+    error: error.message,
+  }
+);
+
+export const fetchSingleAppPending = () => (
+  {
+    type: FETCH_SINGLE_APP_PENDING,
+  }
+);
+
+export const fetchSingleAppSuccess = (application) => (
+  {
+    type: FETCH_SINGLE_APP_SUCCESS,
+    payload: application,
+  }
+);
+
+export const fetchSingleAppError = (error) => (
+  {
+    type: FETCH_SINGLE_APP_ERROR,
     error: error.message,
   }
 );

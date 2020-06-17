@@ -39,7 +39,7 @@ log4js.configure(log4js_config || 'config/log4js.json')
 
 require('./server/routers/index')(app)
 
-const TARGET = process.env.TARGET || 'http://localhost:9080',
+const TARGET = process.env.TARGET || 'http://openapi-kappnav.apps.kueng2.os.fyre.ibm.com',
       CONTEXT_PATH = config.contextPath,
       STATIC_PATH = path.join(__dirname, 'public'),
       KUBE_ENV = process.env.KUBE_ENV || 'okd',

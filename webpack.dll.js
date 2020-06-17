@@ -40,6 +40,7 @@ module.exports = {
       'react',
       '@carbon/icons',
       '@carbon/themes',
+      '@console/pal',
     ],
   },
   output: {

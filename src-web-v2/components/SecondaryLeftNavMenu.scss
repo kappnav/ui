@@ -1,0 +1,7 @@
+@import '@console/pal/Components/ResourceLevelNav/_styles';
+
+.kv--secondary-nav,
+.kv--secondary-nav-btn {
+  max-width: $pal-side-nav-width;
+  width: 100%;
+}

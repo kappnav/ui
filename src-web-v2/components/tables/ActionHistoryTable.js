@@ -68,7 +68,7 @@ const ActionHistoryResourceTable = () => {
   if (loading && _.isEmpty(commands)) {
     // Only show loading when there is no applications and
     // the API is fetching data
-    return <Loading withOverlay />;
+    return <ResourceTable loading />;
   }
 
   const renderCellContent = (cell) => {

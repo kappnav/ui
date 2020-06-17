@@ -5,7 +5,6 @@ import {
   OverflowMenuItem,
 } from 'carbon-components-react';
 
-
 import _ from 'lodash';
 import msgs from '../../../nls/kappnav.properties';
 

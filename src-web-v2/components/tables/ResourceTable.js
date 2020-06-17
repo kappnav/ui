@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import {
+  DataTableSkeleton,
   DataTable,
   Button,
 } from 'carbon-components-react';
@@ -66,7 +67,12 @@ const ResourceTable = (props) => {
     listOfResources,
     buttonText,
     tableHeaders,
+    loading,
   } = props;
+
+  if (loading) {
+    return <DataTableSkeleton showHeader={false} />;
+  }
 
   return (
     <DataTable
@@ -144,9 +150,11 @@ ResourceTable.propTypes = {
     header: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
   })).isRequired,
+  loading: PropTypes.bool,
 };
 
 ResourceTable.defaultProps = {
+  loading: false,
   renderCellContent: (cell) => cell.value,
 };
 
