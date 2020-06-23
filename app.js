@@ -36,6 +36,8 @@ const logger = log4js.getLogger('server')
 var log4js_config = process.env.LOG4JS_CONFIG ? JSON.parse(process.env.LOG4JS_CONFIG) : undefined
 log4js.configure(log4js_config || 'config/log4js.json')
 
+app.disable('x-powered-by');
+
 require('./server/routers/index')(app)
 
 const TARGET = process.env.TARGET || 'http://localhost:9080',
