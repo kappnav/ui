@@ -82,7 +82,7 @@ class JobView extends Component {
         <div>
           <SecondaryHeader title={viewTitle} location={location}/>
 
-          <div className="page-content-container" role="main">
+          <div className="page-content-container" role="main" aria-label={viewTitle}>
             <ResourceTable
               rows={this.state.rows}
               headers={this.state.headers} title={''}

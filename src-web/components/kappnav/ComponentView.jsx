@@ -191,7 +191,7 @@ class ComponentView extends Component {
         <SecondaryHeader title={name} breadcrumbItems={breadcrumbItems} location={location}/>
       
       
-      <div className="page-content-container overview-content" role="main">
+      <div className="page-content-container overview-content" role="main" aria-label={name}>
 
         {(() => {
           if (!this.state.loading) {
