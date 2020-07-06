@@ -74,7 +74,7 @@
     border-right: 1px solid $color__gray-1;
     position: fixed;
     height: inherit;
-    width: 15%;
+    width: inherit;
     z-index: 2;
     overflow-y: scroll;
 
@@ -164,6 +164,10 @@
         // This is Carbon v8's default
         min-width: 10rem;
       }
+    }
+
+    .bx--text-input {
+      min-width: 1rem;
     }
   }
 
