@@ -430,7 +430,12 @@ function isActionEnabled(resourceLabels, resourceAnnotations, action) {
     return true;
   }
 
-  let isEnabled = resourceLabels[enablementLabel];
+  let isEnabled = null;
+
+  if (enablementLabel) { //prevent failure when enablementLabel is undefined
+    isEnabled = resourceLabels[enablementLabel];
+  }
+
   if (isEnabled) {
     // The action's enablement-label has value X and
     // the resource has a label of X.  This means the
@@ -438,7 +443,10 @@ function isActionEnabled(resourceLabels, resourceAnnotations, action) {
     return true;
   }
 
-  isEnabled = resourceAnnotations[enablementAnnotation];
+  if (enablementAnnotation) { //prevent failure when enablementAnnotation is undefined
+    isEnabled = resourceAnnotations[enablementAnnotation];
+  }
+
   if (isEnabled) {
     // The action's enablement-annotation has value X and
     // the resource has a annotation of X.  This means the
