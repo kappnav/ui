@@ -66,7 +66,7 @@ class DetailView extends Component {
       return (
         <div>
           <SecondaryHeader title={resourceName} breadcrumbItems={breadcrumbItems} location={location}/>
-          <div className="page-content-container" role="main">
+          <div className="page-content-container" role="main" aria-label={resourceName}>
           <StructuredListModule
             title={staticResourceData.detailKeys.title}
             headerRows={staticResourceData.detailKeys.headerRows}

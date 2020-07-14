@@ -75,9 +75,7 @@ class AppView extends Component {
       return (
         <div>
           <SecondaryHeader title={viewTitle} location={location}/>
-          <div className="page-content-container" role="main">
-
-          
+          <div className="page-content-container" role="main" aria-label={msgs.get('page.applicationView.title')}>
           <NamespaceDropdown />
         <ResourceTable
           rows={this.state.rows}
