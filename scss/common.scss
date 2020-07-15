@@ -33,6 +33,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  &:focus {
+    outline: auto 1px;
+  }
+}
+
 .page-content-container {
   padding: 54px 5% 54px;
 }
@@ -176,4 +182,8 @@ body {
 
 .form-items-indent{
   margin-left: 2rem;
+}
+
+.bx--overflow-menu:focus .bx--overflow-menu__icon {
+    outline: auto 1px;
 }

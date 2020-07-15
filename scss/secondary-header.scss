@@ -45,6 +45,10 @@ $secondary-header-max-height: 6.5rem;
 	  text-decoration: none;
 	  border-bottom: 1px solid transparent;
 	  font-weight: 400;
+	  
+	  &:focus {
+	    outline: auto 1px;
+	  }
 	}
 	.bx--detail-page-header-menu {
       right: 5%;

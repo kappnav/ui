@@ -93,10 +93,18 @@ class SecondaryHeader extends React.Component {
       <button className={'hamburger hamburger--slider ' + (leftNavOpen ? 'is-active' : '')}
               id='hamburger' aria-label={msgs.get('header.menu.label')}
               onClick={this.handleMenuClick} title={msgs.get('header.menu.label')}>
-
-        <span className="hamburger-box">
-          <span className="hamburger-inner"></span>
-        </span>
+			  
+	    {//SVGs were taken from carbon 10, to address an a11y high contrast issue with the previous hamburger menu.
+	     leftNavOpen ? 
+		  <svg width="20" height="20" fill-rule="evenodd">
+			<path d="M10 9.293l4.146-4.147.708.708L10.707 10l4.147 4.146-.708.708L10 10.707l-4.146 4.147-.708-.708L9.293 10 5.146 5.854l.708-.708L10 9.293z" fill-rule="nonzero">
+			</path>
+		  </svg> : 
+		  <svg width="20" height="20" fill-rule="evenodd">
+			<path d="M3 4h14v1H3zM3 10h14v1H3zM3 16h14v1H3z">
+			</path>
+		  </svg> 
+        }
 
       </button>
     )
