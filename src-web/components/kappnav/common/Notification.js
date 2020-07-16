@@ -26,16 +26,23 @@ import {CONTEXT_PATH} from '../../../actions/constants'
 
 const notificationTimeout = 5000 // ms, how long before auto hiding the notification
 
-const _caption = 
+export const _getCaption = () => {
+  const currentTime = new moment()
+			.locale(document.documentElement.getAttribute('lang'))
+			.format('HH:mm:ss   LL')
+  return (
     <div>
-        <h3 className='bx--toast-notification__caption'>{new moment().format('HH:mm:ss   LL')}</h3>
+        <h3 className='bx--toast-notification__caption'>{currentTime}
+		</h3>
         <a href={CONTEXT_PATH + '/jobs'}>
             <Icon className="launch-icon"
                 name='launch'
                 description={msgs.get('toaster.action.icon.label')} 
             />
         </a>
-    </div>
+    </div>)
+}
+    
 
 export default class Notification extends React.PureComponent {
 
@@ -78,7 +85,7 @@ export default class Notification extends React.PureComponent {
             <ToastNotification
                 // Using key attribute as a workaround for problem: https://github.com/carbon-design-system/carbon/issues/4211
                 key={'toast-notification-' + new Date().getTime()}
-                caption={_caption}
+                caption={_getCaption()}
                 hideCloseButton={false}
                 iconDescription={msgs.get('modal.button.close.the.modal')}
                 onCloseButtonClick={handleClose}
