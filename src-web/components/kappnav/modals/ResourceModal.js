@@ -52,9 +52,19 @@ class IsomorphicEditor extends React.Component {
     element.setAttribute('aria-label', 'code editor cursor')
   }
   render() {
+    const {
+        onSave
+    } = this.props
+    
     if(this.state.mounted){
       return (
-        <AceEditor {...this.props} onLoad={this.addAriaLabelToAceCursor} setOptions={{showLineNumbers: false}} />
+        <AceEditor {...this.props} onLoad={this.addAriaLabelToAceCursor} setOptions={{showLineNumbers: false}} 
+        commands={[{   // commands is array of key bindings.
+          name: 'save', //name for the key binding.
+          bindKey: {win: 'Ctrl-S', mac: 'Command-S'}, //key combination used for the command.
+          exec: () => onSave(),
+        }]}
+        />
       )
     }
     return ( <div />)
@@ -225,6 +235,7 @@ class ResourceModal extends React.PureComponent {
               mode={editorMode}
               width='50vw'
               height='40vh'
+              onSave={this.handleSubmit}
               onChange={this.onChange}
               fontSize={12}
               showPrintMargin={false}
